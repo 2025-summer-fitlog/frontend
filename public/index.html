@@ -598,42 +598,55 @@
     }
 
     function saveTodayRecord() {
-      const symbols = selectedSymbols.filter(s => s === "O" || s === "△" || s === "X");
+      const recordTextInputs = document.querySelectorAll(".record-text");
+      const symbols = selectedSymbols.filter(s => ["O", "△", "X"].includes(s));
+      const texts = [...recordTextInputs].map(input => input.value);
       const memo = document.querySelector(".memo-input").value;
-      const texts = [...document.querySelectorAll(".record-text")].map(input => input.value);
 
-
-      // 모든 작성된 수행 운동 이름이 입력되었는지 확인
+      // 운동 계획이 있는 경우 → 모든 운동명 입력 필수
       const hasAnyLine = recordTextInputs.length > 0;
-      const allLinesFilled = texts.every(text => text !== "");
-
+      const allLinesFilled = texts.every(text => text.trim() !== "");
       if (hasAnyLine && !allLinesFilled) {
         alert("모든 수행 운동 이름을 입력해주세요.");
-        return;
+        return; // 여기서 그냥 종료, DOM 변경 없음
       }
 
+      // 모든 운동 계획에 O/△/X 선택 필수
+      const allSymbolsSelected = selectedSymbols.length > 0 &&
+        selectedSymbols.every(s => ["O", "△", "X"].includes(s));
+      if (hasAnyLine && !allSymbolsSelected) {
+        alert("모든 수행 운동에 O/△/X를 선택해주세요.");
+        return; // 여기서도 DOM 변경 없음
+      }
+
+      // 데이터 저장
       const data = JSON.parse(localStorage.getItem("records") || "{}");
       data[today] = {
         symbols,
         texts,
         memo,
-        img: imgSrc
+        img: [...uploadedImages]
       };
+
+      localStorage.setItem("records", JSON.stringify(data));
+
       updateTodayChart(symbols);
       updateWeeklyChart(data);
       updatemonthly(data);
       updateFeedback();
 
-      const score = symbols.length ? symbols.reduce((sum, s) => sum + getScore(s), 0) / symbols.length : 0;
+      const score = symbols.length
+        ? symbols.reduce((sum, s) => sum + getScore(s), 0) / symbols.length
+        : 0;
       const mainFeedback = getMainFeedback(score);
       const extraFeedback = getConditionalFeedback();
-      document.querySelector(".balloon-text").innerHTML = `${mainFeedback}${extraFeedback ? "<br><br>" + extraFeedback : ""}`;
-      
-      localStorage.setItem("records", JSON.stringify(data));
+      document.querySelector(".balloon-text").innerHTML =
+        `${mainFeedback}${extraFeedback ? "<br><br>" + extraFeedback : ""}`;
 
-      alert("모든 기록이 저장되었습니다. 오늘도 수고하셨습니다 😎")
-    
+      alert("모든 기록이 저장되었습니다. 오늘도 수고하셨습니다 😎");
     }
+
+
 
     function updateTodayChart(symbols) {
       const score = symbols.length ? symbols.reduce((sum, s) => sum + getScore(s), 0) / symbols.length : 0;
@@ -670,12 +683,17 @@
       const symbols = record.symbols || [];
       const texts = record.texts || [];
 
-      selectedSymbols = [...symbols];
+      selectedSymbols = [];
       logList.innerHTML = "";
-      selectedSymbols.forEach((s, i) => addRecordLine(s, texts[i] || ""));
+
+      // 저장된 데이터만 줄 생성 (빈 줄 없음)
+      if (texts.length > 0) {
+        texts.forEach((t, i) => addRecordLine(symbols[i], t));
+      } else {
+        addRecordLine(); // 기본 한 줄
+      }
 
       document.querySelector(".memo-input").value = record.memo || "";
-
       uploadedImages = Array.isArray(record.img) ? record.img : [];
       renderImagePreviews();
 
@@ -684,10 +702,12 @@
 
 
 
+
     let weeklyChartInstance = null;
     function updateWeeklyChart(data) {
       const start = new Date(currentWeekStart);
-      start.setDate(start.getDate() - start.getDay());
+      const day = (start.getDay() + 6) % 7;
+      start.setDate(start.getDate() - day);
 
       const labels = [];
       const scores = [];
@@ -736,54 +756,68 @@
     }
 
     function updatemonthly(data) {
-    const tbody = document.getElementById("monthly-body");
-    const header = document.getElementById("monthly-header");
-    tbody.innerHTML = "";
+      const tbody = document.getElementById("monthly-body");
+      const header = document.getElementById("monthly-header");
+      const monthlyTable = document.querySelector(".monthly");
+      tbody.innerHTML = "";
 
-    const year = currentMonth.getFullYear();
-    const month = currentMonth.getMonth();
+      const year = currentMonth.getFullYear();
+      const month = currentMonth.getMonth();
 
-    header.textContent = `${year}.${month + 1}`;
+      header.textContent = `${year}.${month + 1}`;
 
-    const firstDay = new Date(year, month, 1).getDay();
-    const lastDate = new Date(year, month + 1, 0).getDate();
+      const firstDay = new Date(year, month, 1).getDay();
+      const lastDate = new Date(year, month + 1, 0).getDate();
 
-    let row = document.createElement("tr");
-    let cellCount = 0;
+      let cellCount = 0;
+      let weekCount = Math.ceil((firstDay + lastDate) / 7); // 이번 달 주 수 계산
 
-    for (let i = 0; i < firstDay; i++) {
-      row.appendChild(document.createElement("td"));
-      cellCount++;
-    }
-
-    for (let d = 1; d <= lastDate; d++) {
-      const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
-      const cell = document.createElement("td");
-      cell.textContent = d;
-
-      const record = data[dateStr];
-      if (record && Array.isArray(record.symbols)) {
-        const score = record.symbols.reduce((sum, s) => sum + getScore(s), 0) / record.symbols.length;
-        cell.style.backgroundColor = getColorByScore(score);
+      // 주 수에 따른 크기 조정
+      if (weekCount >= 5) {
+        monthlyTable.style.transform = "scale(0.88)"; // 비율 축소
+        monthlyTable.style.transformOrigin = "top center"; // 위쪽 기준
+        monthlyTable.style.marginBottom = "-30px"; // 아래 공간 줄이기
+      } else {
+        monthlyTable.style.transform = "scale(1)";
+        monthlyTable.style.marginBottom = "0";
       }
 
-      cell.addEventListener("click", () => updateRightPanel(dateStr));
-      row.appendChild(cell);
-      cellCount++;
+      let row = document.createElement("tr");
 
-      if (cellCount % 7 === 0) {
-        tbody.appendChild(row);
-        row = document.createElement("tr");
-      }
-    }
-
-    if (cellCount % 7 !== 0) {
-      for (let i = cellCount % 7; i < 7; i++) {
+      for (let i = 0; i < firstDay; i++) {
         row.appendChild(document.createElement("td"));
+        cellCount++;
       }
-      tbody.appendChild(row);
+
+      for (let d = 1; d <= lastDate; d++) {
+        const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+        const cell = document.createElement("td");
+        cell.textContent = d;
+
+        const record = data[dateStr];
+        if (record && Array.isArray(record.symbols)) {
+          const score = record.symbols.reduce((sum, s) => sum + getScore(s), 0) / record.symbols.length;
+          cell.style.backgroundColor = getColorByScore(score);
+        }
+
+        cell.addEventListener("click", () => updateRightPanel(dateStr));
+        row.appendChild(cell);
+        cellCount++;
+
+        if (cellCount % 7 === 0) {
+          tbody.appendChild(row);
+          row = document.createElement("tr");
+        }
+      }
+
+      if (cellCount % 7 !== 0) {
+        for (let i = cellCount % 7; i < 7; i++) {
+          row.appendChild(document.createElement("td"));
+        }
+        tbody.appendChild(row);
+      }
     }
-  }
+
 
 
     function handleImageUpload(event) {
@@ -824,25 +858,6 @@
       alert("기록이 수정되었습니다!");
     });
 
-    document.getElementById("delete-btn").addEventListener("click", () => {
-      const dateStr = document.getElementById("log-date").textContent.match(/\((.*?)\)/)?.[1];
-      if (!dateStr) return;
-
-      const confirmDelete = confirm(`정말 ${dateStr}의 기록을 삭제하시겠어요?`);
-      if (!confirmDelete) return;
-
-      const data = JSON.parse(localStorage.getItem("records") || "{}");
-      delete data[dateStr];
-      localStorage.setItem("records", JSON.stringify(data));
-
-      alert("기록이 삭제되었습니다.");
-
-      // 삭제 후 오늘로 이동
-      document.querySelector(".tab-btn[data-tab='today']").click();
-    });
-
-
-
     document.querySelectorAll(".tab-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
@@ -876,30 +891,81 @@
     });
 
     document.addEventListener("DOMContentLoaded", () => {
-      const planContainer = document.getElementById("plan-list");
-      const savedPlans = JSON.parse(localStorage.getItem("todayPlans") || "[]");
+      const saveBtn = document.getElementById("save-btn");
+      const editBtn = document.getElementById("edit-btn");
+      const deleteBtn = document.getElementById("delete-btn");
 
-      if (savedPlans.length === 0) {
-        addPlanInput();
-      } else {
-        savedPlans.forEach(plan => addPlanInput(plan));
+      // 저장 (오늘 기록)
+      if (saveBtn) {
+        saveBtn.addEventListener("click", () => {
+          saveTodayRecord();         // 오늘 기록 저장
+          updateRightPanel(today);   // 저장 직후 화면 갱신
+        });
+      }
+
+      // 수정 (오늘 & 과거 공통)
+      if (editBtn) {
+        editBtn.addEventListener("click", () => {
+          let dateStr;
+          if (document.getElementById("log-date").textContent === "today") {
+            dateStr = today;
+          } else {
+            const match = document.getElementById("log-date").textContent.match(/\((.*?)\)/);
+            dateStr = match ? match[1] : null;
+          }
+          if (dateStr) {
+            saveOrUpdateRecord(dateStr); // 저장
+            updateRightPanel(dateStr);   // 수정 직후 화면 갱신
+          }
+        });
+      }
+
+      // 삭제 (오늘 & 과거 공통)
+      if (deleteBtn) {
+        deleteBtn.addEventListener("click", () => {
+          let dateStr;
+          if (document.getElementById("log-date").textContent === "today") {
+            dateStr = today;
+          } else {
+            const match = document.getElementById("log-date").textContent.match(/\((.*?)\)/);
+            dateStr = match ? match[1] : null;
+          }
+          if (!dateStr) return;
+
+          if (confirm(`${dateStr} 기록을 삭제하시겠습니까?`)) {
+            const data = JSON.parse(localStorage.getItem("records") || "{}");
+            delete data[dateStr];
+            localStorage.setItem("records", JSON.stringify(data));
+            alert("기록이 삭제되었습니다!");
+            updateRightPanel(dateStr); // 삭제 직후 화면 갱신
+          }
+        });
       }
     });
 
 
+
+    // 오늘 데이터 불러오기
     const recordData = JSON.parse(localStorage.getItem("records") || "{}");
     const record = recordData[today] || {};
     const todaySymbols = Array.isArray(record.symbols) ? record.symbols : [];
 
     // 오른쪽 화면 초기화
+    logList.innerHTML = ""; // 기존 줄 비우기
     if (todaySymbols.length > 0) {
       selectedSymbols = [...todaySymbols];
-      logList.innerHTML = "";
-      selectedSymbols.forEach(s => addRecordLine(s));
-      updateTodayChart(selectedSymbols);
+      todaySymbols.forEach((s, i) => addRecordLine(s, record.texts ? record.texts[i] : ""));
     } else {
+      // 기본 한 줄 무조건 추가
+      selectedSymbols = [];
       addRecordLine();
     }
+
+    updateTodayChart(todaySymbols);
+    document.querySelector(".memo-input").value = record.memo || "";
+    uploadedImages = Array.isArray(record.img) ? record.img : [];
+    renderImagePreviews();
+
 
     // 메모/이미지도 불러오기
     document.querySelector(".memo-input").value = record.memo || "";
@@ -1087,10 +1153,36 @@
     }
 
     function saveOrUpdateRecord(dateStr) {
-      const symbols = selectedSymbols.filter(s => ["O", "△", "X"].includes(s));
-      const texts = [...document.querySelectorAll(".record-text")].map(input => input.value);
-      const memo = document.querySelector(".memo-input").value;
+      const recordTextInputs = document.querySelectorAll(".record-text");
+      const symbols = [];
+      const texts = [];
 
+      recordTextInputs.forEach((input, i) => {
+        const text = input.value.trim();
+        const symbol = selectedSymbols[i];
+        // 운동명이 비어있지 않은 줄만 저장
+        if (text !== "") {
+          texts.push(text);
+          symbols.push(symbol);
+        }
+      });
+
+      // 유효성 검사: 한 줄이라도 있으면 모두 O/△/X 선택 필수
+      const hasAnyLine = texts.length > 0;
+      const allSymbolsSelected = symbols.every(s => ["O", "△", "X"].includes(s));
+
+      if (hasAnyLine && !allSymbolsSelected) {
+        alert("모든 수행 운동에 O/△/X를 선택해주세요.");
+        return; // 저장 안 함
+      }
+
+      if (hasAnyLine && texts.some(t => t === "")) {
+        alert("모든 수행 운동 이름을 입력해주세요.");
+        return; // 저장 안 함
+      }
+
+      // 저장
+      const memo = document.querySelector(".memo-input").value;
       const data = JSON.parse(localStorage.getItem("records") || "{}");
       data[dateStr] = {
         symbols,
@@ -1102,11 +1194,10 @@
       localStorage.setItem("records", JSON.stringify(data));
       alert("기록이 저장되었습니다!");
 
-      if (dateStr === today) {
-        updateTodayChart(symbols);
-        updateFeedback();
-      }
+      updateRightPanel(dateStr); // 화면 갱신
     }
+
+
 
 
     document.addEventListener("DOMContentLoaded", () => {
@@ -1142,29 +1233,41 @@
       const editBtn = document.getElementById("edit-btn");
       const deleteBtn = document.getElementById("delete-btn");
 
+      // 저장 (오늘 기록만)
       if (saveBtn) {
         saveBtn.addEventListener("click", () => {
-          saveTodayRecord();
+          saveTodayRecord(); // 오늘 저장 함수만 호출
+          updateRightPanel(today);
         });
       }
 
-      // 지난 기록 수정
+      // 수정 (오늘 & 과거 공통)
       if (editBtn) {
         editBtn.addEventListener("click", () => {
-          const match = document.getElementById("log-date").textContent.match(/\((.*?)\)/);
-          const dateStr = match ? match[1] : null;
+          let dateStr;
+          if (document.getElementById("log-date").textContent === "today") {
+            dateStr = today;
+          } else {
+            const match = document.getElementById("log-date").textContent.match(/\((.*?)\)/);
+            dateStr = match ? match[1] : null;
+          }
           if (dateStr) {
             saveOrUpdateRecord(dateStr);
+            updateRightPanel(dateStr);
           }
         });
       }
 
-      // 지난 기록 삭제
+      // 삭제 (오늘 & 과거 공통)
       if (deleteBtn) {
         deleteBtn.addEventListener("click", () => {
-          const isTodayLog = document.getElementById("log-date").textContent === "today";
-          const match = document.getElementById("log-date").textContent.match(/\((.*?)\)/);
-          const dateStr = isTodayLog ? today : (match ? match[1] : null);
+          let dateStr;
+          if (document.getElementById("log-date").textContent === "today") {
+            dateStr = today;
+          } else {
+            const match = document.getElementById("log-date").textContent.match(/\((.*?)\)/);
+            dateStr = match ? match[1] : null;
+          }
           if (!dateStr) return;
 
           if (confirm(`${dateStr} 기록을 초기화하시겠습니까?`)) {
@@ -1172,11 +1275,13 @@
             delete data[dateStr];
             localStorage.setItem("records", JSON.stringify(data));
             alert("기록이 초기화되었습니다!");
-            updateRightPanel(dateStr);
+            updateRightPanel(dateStr); // 삭제 후 화면 갱신
           }
         });
       }
     });
+
+
 
     // 차트 및 기록 표시
     updateTodayChart(todaySymbols);
