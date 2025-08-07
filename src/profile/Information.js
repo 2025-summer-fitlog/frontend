@@ -1,44 +1,53 @@
 import styles from "./Information.module.css";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 
 function Information() {
     const navigate = useNavigate();
 
-    const [height, setHeight] = useState("");
-    const [weight, setWeight] = useState("");
-    const [age, setAge] = useState("");
-    const [gender, setGender] = useState("");
+    const getValue = (selector) => {
+        const element = document.querySelector(selector);
+        return element ? element.value : "";
+    }
 
-    const handleBtnClick = async () => {
-        if (!height || !weight || !age || !gender) {
-            alert("모든 신체정보를 입력해주세요.");
-            return;
-        }
+    const handleBtnClick = () => {
+        const height = getValue("#height");
+        const weight = getValue("#weight");
+        const year = getValue("#year");
+        const month = getValue("#month");
+        const day = getValue("#day");
+        const gender = getValue("#gender");
+        const career = getValue("#career");
+        const hour = getValue("#hour");
+        const minute = getValue("#minute");
 
-        try {
-            const response = await fetch("http://fitlog-2025.duckdns.org:8080/api/init/body", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    height: Number(height),
-                    weight: Number(weight),
-                    age: Number(age),
-                    gender
-                }),
-            });
+        const purposeInput = document.querySelector('input[name="purpose"]:checked');
+        const purpose = purposeInput ? purposeInput.nextElementSibling.innerText : "";
 
-            const data = await response.json();
-
-            if (response.ok) {
-                navigate("/main");
-            } else {
-                alert("오류가 발생했습니다: " + data.message);
+        const partInput = document.querySelectorAll('input[name="part"]:checked');
+        const part = [];
+        partInput.forEach((input) => {
+            if (input.nextElementSibling) {
+                part.push(input.nextElementSibling.innerText);
             }
-        } catch (error) {
-            alert("서버 오류: " + error.message);
-        }
-    };
+        });
+
+        const frequency = getValue("#frequency");
+
+        const information = {
+            height, weight,
+            year, month, day,
+            gender,
+            career,
+            hour, minute,
+            purpose,
+            frequency,
+            part,
+        };
+
+        localStorage.setItem("information", JSON.stringify(information));
+
+        navigate("/main");
+    }
 
     return (
         <div className={styles.container}>
@@ -49,8 +58,6 @@ function Information() {
                     className={styles.height}
                     type="number"
                     placeholder="키"
-                    value={height}
-                    onChange={(e) => setHeight(e.target.value)}
                 />
                 <span className={styles.cm}>cm</span>
                 <input
@@ -58,8 +65,6 @@ function Information() {
                     className={styles.weight}
                     type="number"
                     placeholder="몸무게"
-                    value={weight}
-                    onChange={(e) => setWeight(e.target.value)}
                 />
                 <span className={styles.kg}>kg</span>
                 <div className={styles.age}>
@@ -68,8 +73,6 @@ function Information() {
                         className={styles.year}
                         type="number"
                         placeholder="년"
-                        value={age}
-                        onChange={(e) => setAge(e.target.value)}
                     />
                     <input
                         id="month"
@@ -84,15 +87,10 @@ function Information() {
                         placeholder="일"
                     />
                 </div>
-                <select
-                    id="gender"
-                    className={styles.gender}
-                    value={gender}
-                    onChange={(e) => setGender(e.target.value)}
-                >
+                <select id="gender" className={styles.gender}>
                     <option selected disabled>성별</option>
-                    <option value="male">남성</option>
-                    <option value="female">여성</option>
+                    <option>남성</option>
+                    <option>여성</option>
                 </select>
                 <select id="career" className={styles.career}>
                     <option selected disabled>운동 경력</option>
@@ -107,8 +105,8 @@ function Information() {
                 <section className={styles.time}>
                     <h1>시간</h1>
                     <div>
-                        <input id="hour" placeholder="" type="number"/><span>시간</span>
-                        <input id="minute" placeholder="" type="number"/><span>분</span>
+                        <input id="hour" placeholder="" type="number" /><span>시간</span>
+                        <input id="minute" placeholder="" type="number" /><span>분</span>
                     </div>
                 </section>
                 <section className={styles.purpose}>
