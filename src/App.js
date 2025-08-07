@@ -1,19 +1,19 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./1/Home";
-import Login from "./1/Login";
-import Signup1 from "./1/Signup1";
-import Signup2 from "./1/Signup2";
-import FindPw from "./1/FindPw";
-import ResetPw from "./1/ResetPw";
-import Information from "./2/Information";
-import Mainscrn from "./2/Mainscrn";
-import Profilescrn from "./2/Profilescrn";
-import Profile1 from "./2/Profile1";
-import Profile2 from "./2/Profile2";
-import Fit from "./3/Fit";
-import Recommend from "./4/Recommend";
-import Video from "./4/Video";
-import Save from "./4/Save";
+import Home from "./login/Home";
+import Login from "./login/Login";
+import Signup1 from "./login/Signup1";
+import Signup2 from "./login/Signup2";
+import FindPw from "./login/FindPw";
+import ResetPw from "./login/ResetPw";
+import Information from "./profile/Information";
+import Mainscrn from "./profile/Mainscrn";
+import Profilescrn from "./profile/Profilescrn";
+import Profile1 from "./profile/Profile1";
+import Profile2 from "./profile/Profile2";
+import Fit from "./fit/Fit";
+import Recommend from "./exercise/Recommend";
+import Video from "./exercise/Video";
+import Save from "./exercise/Save";
 
 function App() {
   return (
