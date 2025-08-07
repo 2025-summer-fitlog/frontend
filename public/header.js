@@ -1,21 +1,29 @@
-function switchTab(tab) {
-  document.querySelectorAll('.tab').forEach(btn => btn.classList.remove('active'));
-  document.querySelector(`.tab[data-tab="${tab}"]`)?.classList.add('active');
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import './Header.css';
 
-  if (tab === 'fit') {
-    window.location.href = 'fit.html';
-  } else if (tab === 'log') {
-    window.location.href = 'log.html';
-  }
+function Header() {
+  const navigate = useNavigate();
+
+  const switchTab = (tab) => {
+    if (tab === 'fit') {
+      navigate('/');
+    } else if (tab === 'log') {
+      navigate('/log');
+    }
+  };
+
+  const goToProfile = () => {
+    navigate('/profile');
+  };
+
+  return (
+    <div className="header">
+      <button className="tab" data-tab="fit" onClick={() => switchTab('fit')}>Fit</button>
+      <button className="tab" data-tab="log" onClick={() => switchTab('log')}>Log</button>
+      <button onClick={goToProfile}>프로필</button>
+    </div>
+  );
 }
 
-function goToProfile() {
-  window.location.href = "profile.html";
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-  const container = document.querySelector(".container");
-  if (container) {
-    // 작업 수행
-  }
-});
+export default Header;
