@@ -15,7 +15,7 @@ function Recommend() {
 
     const handleProfileClick = () => navigate("/profile");
     const handleSaveClick = () => navigate("/save");
-    const handleLogoutClick = () => navigate("/");
+    const handleLogoutClick = () => logout();
     const handleLogoClick = () => navigate("/main");
     const profileMenu = () => setProfile((prev) => !prev);
 
@@ -55,6 +55,24 @@ function Recommend() {
             return null;
         }
     }
+
+    const logout = async () => {
+        try {
+            const response = await fetch("http://fitlog-2025.duckdns.org:8080/api/users/logout", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+            });
+
+            if (!response.ok) throw new Error("로그아웃에 실패하였습니다.");
+
+            navigate("/");
+        } catch (error) {
+            alert("로그아웃에 실패하였습니다.");
+        }
+    };
 
     return (
         <div className={styles.container}>
