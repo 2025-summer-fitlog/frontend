@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>FitLog</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .container {
+      display: flex;
+      flex-direction: column;
+      height:78vh;
+      gap: 0px;
+      align-items: stretch;
+      flex-wrap: nowrap;
+    }
+    .menu {
+      display: flex;
+      gap: 100px;
+      margin: 40px 0 20px 0;
+      margin-bottom: 40px;
+    }
+    .menu button {
+      padding: 12px 30px;
+      border: 1px solid #9ADBF6;
+      background: #F5FBFE;
+      border-radius: 20px;
+      font-size: 22px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      transform: scale(1);
+    }
+    .menu button.active {
+      background: #9ADBF6;
+      color: white;
+      font-size: 22px;
+      transform: scale(1.30);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .left {
+      min-width: 0;
+      flex: 1;
+      background: white;
+      padding: 1px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .date {
+      margin-bottom: 12px;
+      font-size: 30px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .circle {
+      width: 450px;
+      height: 450px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-top: 10px;
+      padding-bottom: 35.5px;
+    }
+    canvas {
+      width: 300px;
+      height: 300px;
+    }
+    .right {
+      min-width: 0;
+      flex: 1;
+      background: #F5FBFE;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+    }
+    .right h2 {
+      font-size: 30px;
+      font-weight: 700;
+      margin-bottom: 65px;
+    }
+    .record-box {
+      position: relative;
+      flex: 0 0 380px;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      padding: 24px 20px;
+      margin-left: 20px;
+      margin-bottom: 50px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      height: 235px;
+      padding-bottom: 60px;
+      overflow-y:auto;
+      text-align: left;
+      width: 500px;
+    }
+    .record-box ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .record-box li {
+      font-family: 'Pretendard', sans-serif;
+      font-size: 20px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .record-options span {
+      margin-left: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #ccc;
+      font-size: 25px;
+    }
+    .record-options span.selected {
+      color: #FFF1B8;
+    }
+    .add-btn {
+      color: #FFF1B8;
+      border: none;
+      padding: 6px 12px;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .quote {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #444;
+      margin-top: 30px;
+      flex-wrap: nowrap;
+    }
+    .character {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid black;
+      background-image: url("runnerIcon.png");
+      background-size: cover;
+      background-position: center;
+    }
+    .balloon-text {
+      font-size: 18px;
+      background-color: white;
+      padding: 20px 40px;
+      border-radius: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      line-height: 1.5;
+      display: inline-block;
+      max-width: 400px;
+      min-width: 160px;
+      word-break: break-word;
+      position: relative;
+    }
+    .balloon-text::before {
+      content: "";
+      position: absolute;
+      left: -10px;
+      top: 20px;
+      width: 0;
+      height: 0;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-right: 10px solid white;
+    }
+    .tab-content {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+    .tab-content.active {
+      display: flex;
+    }
+    .monthly {
+      margin: 0 auto;
+      width: 100%;
+      max-width: 600px;
+      table-layout: fixed;
+      border-spacing: 10px 12.5px;
+    }
+    .monthly td {
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      vertical-align: middle;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+    .record-memo-row {
+      display: flex;
+      gap: 50px;
+      justify-content: center;
+      flex-direction: row;
+      margin-bottom: 40px;
+      padding-left: 40px;
+    }
+    .photo-icon {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      cursor: pointer;
+      opacity: 0.6;
+      z-index: 2;
+      background-image: url('https://cdn-icons-png.flaticon.com/512/685/685655.png');
+    }
+    .photo-icon:hover {
+      opacity: 1;
+    }
+    .photo-icon img {
+      width: 32px; height: 32px;
+    }
+    .memo-input-wrapper {
+      position: relative;
+      width: 100%;
+    }
+    #month {
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      margin-top: 0;
+      padding-top: 16.5px;
+      padding-bottom: 55px;
+    }
+    #monthly-header-wrapper {
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    #week {
+      padding-top: 20px;
+      padding-bottom: 60px;
+    }
+    #weeklyChart {
+      display: block;
+      margin: 0 auto;
+      width: 100%;
+      max-width: 600px;
+      height: 800px;
+    }
+    #weekly-header-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 36px;
+      margin-bottom: 30px;
+      margin-top: 10px;
+      font-size: 15px;
+    }
+    .tab-date {
+      font-size: 30px;
+      font-weight: 800;
+      text-align: center;
+      margin-top: 10px;
+      margin-bottom: 30px;
+    }
+    .add-line {
+      font-size: 28px;
+      font-weight: 700;
+      color: #555;
+      text-align: center;
+      cursor: pointer;
+      margin-top: 16px;
+      margin-left: 6px;
+      transition: color 0.2s;
+    }
+    .add-line:hover {
+      color: #E0B94C;
+    }
+    .image-preview-in-memo {
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+      overflow-x: auto;
+      margin-bottom: 10px;
+    }
+    .image-preview-in-memo img {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+    .preview-wrapper {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 1px solid #ccc;
+      background: #f5f5f5;
+    }
+    .preview-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .delete-image-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      border: none;
+      font-size: 14px;
+      padding: 4px 8px;
+      border-radius: 10px;
+      cursor: pointer;
+      z-index: 2;
+    }
+    .arrow-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 24px;
+      cursor: pointer;
+      color: #333;
+    }
+    .arrow-btn:hover {
+      color: #0C9EF9; 
+    }
+    .memo-box {
+      justify-content: space-between;
+      height: 320px;
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+    }
+    .memo-input-wrapper {
+      position: relative;
+      width: 100%;
+      background: #FFF5D9;
+      border: 1px solid #ccc;
+      border-radius: 16px;
+      padding: 16px 20px 20px 20px;
+      box-shadow: 0 2px 6px rgba*(0,0,0,0.05);
+      min-height: 320px;
+      max-height: 320px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    .memo-input {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      resize: none;
+      border: none;
+      outline: none;
+      background: none;
+      font-size: 18px;
+      line-height: 1.6;
+      overflow-y: auto;
+    }
+    .save-btn {
+      align-self: flex-end;
+      margin-top: 6px;
+      background: none;
+      border: 1px solid #ccc;
+      padding: 6px 14px;
+      font-size: 14px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .btn-group {
+      position: absolute;
+      bottom: -52px;
+      right: 20px;
+      display: flex;
+      gap: 12px;
+    }
+
+
+  </style>
+</head>
+<body>
+  <div id="header-container"></div>
+  <div class="container">
+    <div class="left">
+      <div class="menu">
+        <button class="tab-btn active" data-tab="today">오늘</button>
+        <button class="tab-btn" data-tab="week">주간</button>
+        <button class="tab-btn" data-tab="month">월별</button>
+      </div>
+      <div class="tab-content active" id="today">
+        <div class="date" id="today-date" style="display: none;"></div>
+        <div class="circle">
+          <canvas id="circleChart" width="420" height="420"></canvas>
+        </div>
+      </div>
+
+      <div class="tab-content" id="week">
+        <div id="weekly-header-wrapper" style="display: flex; justify-content: center; align-items: center; gap: 36px; margin-bottom: 30px; margin-top: 10px;">
+          <button class="arrow-btn" onclick="changeWeek(-1)">◀</button>
+          <div id="weekly-header" class="tab-date"></div>
+          <button class="arrow-btn" onclick="changeWeek(1)">▶</button>
+        </div>
+        <canvas id="weeklyChart"></canvas>
+      </div>
+      <div class="tab-content" id="month">
+        <div id="monthly-header-wrapper" style="display: flex; justify-content: center; align-items: center; gap: 36px; margin-bottom: 30px; margin-top: 10px;">
+          <button class="arrow-btn" onclick="changeMonth(-1)">◀</button>
+          <div id="monthly-header" class="tab-date"></div>
+          <button class="arrow-btn" onclick="changeMonth(1)">▶</button>
+        </div>
+        <table class="monthly"><tbody id="monthly-body"></tbody></table>
+      </div>
+    </div>
+
+    <div class="right">
+      <h2 id="log-date"></h2>
+      <div class="record-memo-row"> 
+        <div class="record-box">
+          <ul id="log-list"></ul>
+          <div class="add-line" onclick="addRecordLine()">＋</div>
+        </div>
+
+        <div class="memo-box" style="position: relative;">
+          <div class="memo-input-wrapper">
+            <div class="image-preview-in-memo" id="image-preview-in-memo"></div>
+
+            <label for="photo-input" class="photo-icon">
+              <img src="https://cdn-icons-png.flaticon.com/512/685/685655.png" alt="사진 추가" />
+            </label>
+            
+            <textarea class="memo-input" placeholder="오늘의 운동 기록"></textarea>
+          </div>
+          <input type="file" id="photo-input" accept="image/*" multiple style="display: none" onchange="handleImageUpload(event)" />
+            <div class="btn-group" style="position: absolute; bottom: -52px; right: 20px; display: flex; gap: 12px;">
+              <button id="save-btn" class="save-btn">저장</button>
+              <button id="edit-btn" class="save-btn">수정</button>
+              <button id="delete-btn" class="save-btn">삭제</button>
+            </div>
+          </div>
+      </div>
+      <div class="quote" id="feedback-section">
+        <div class="character"></div>
+        <div class="balloon-text">feedback</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="profile-menu" style="display: none; position: absolute; top: 70px; right: 32px; background: white; border: 1px solid black; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 999;">
+    <div onclick="goToProfile()" style="padding:10px 20px; cursor:pointer;">👤 프로필</div>
+    <div style="padding:10px 20px; cursor:pointer;">▶ 저장 영상</div>
+    <div style="padding:10px 20px; cursor:pointer;">↩ 로그아웃</div>
+  </div>
+
+  <div id="image-modal" style="
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;">
+    <img id="modal-img" style="max-width: 90vw; max-height: 90vh; border-radius: 10px;" />
+  </div>
+
+
+
+
+
+  <script>
+    fetch('header.html')
+      .then(res => res.text())
+      .then(data => {
+        document.getElementById('header-container').innerHTML = data;
+      });
+
+    const today = new Date().toISOString().slice(0, 10);
+    let currentMonth = new Date();
+    let currentWeekStart = new Date();
+    var uploadedImages = [];
+    
+    document.getElementById("today-date").textContent = today.replace(/(\d{4})-(\d{2})-(\d{2})/, "$1.$2.$3");
+    document.getElementById("log-date").textContent = document.getElementById("today-date").textContent;
+
+    const logList = document.getElementById("log-list");
+    let selectedSymbols = [];
+
+    function addRecordLine(symbol = "", text = "") {
+      const index = selectedSymbols.length;
+      selectedSymbols.push(symbol);
+
+      const li = document.createElement("li");
+      li.style.position = "relative";
+      li.style.display = "flex";
+      li.style.alignItems = "center";
+      li.style.cursor = "pointer";
+
+      const iconSpan = document.createElement("span");
+      iconSpan.classList.add("line-icon");
+      iconSpan.textContent = "•";
+      iconSpan.style.marginRight = "8px";
+
+      // 오늘의 운동 계획 입력
+      const input = document.createElement("input");
+      input.type = "text";
+      input.className = "record-text";
+      input.placeholder = "오늘의 운동 계획";
+      input.value = text;
+      input.style.flex = "1";
+      input.style.fontSize = "18px";
+      input.style.border = "none";
+      input.style.outline = "none";
+      input.style.background = "none";
+
+      const optionSpan = document.createElement("span");
+      optionSpan.className = "record-options";
+      optionSpan.dataset.index = index;
+      optionSpan.innerHTML = `
+        <span onclick="selectSymbol(event, 'O')">O</span>
+        <span onclick="selectSymbol(event, '△')">△</span>
+        <span onclick="selectSymbol(event, 'X')">X</span>
+      `;
+
+      li.appendChild(iconSpan);
+      li.appendChild(input);
+      li.appendChild(optionSpan);
+      logList.appendChild(li);
+
+      if (symbol) {
+        optionSpan.querySelectorAll("span").forEach(span => {
+          span.classList.toggle("selected", span.textContent === symbol);
+        });
+      }
+
+      // 삭제 버튼
+      let hoverTimer;
+
+      li.addEventListener("mouseenter", () => {
+        hoverTimer = setTimeout(() => {
+          iconSpan.textContent = "삭제";
+          iconSpan.style.color = "#e74c3c";
+          iconSpan.style.fontSize = "14px";
+          iconSpan.style.fontWeight = "bold";
+          iconSpan.style.cursor = "pointer";
+        }, 1000);
+      });
+
+      li.addEventListener("mouseleave", () => {
+        clearTimeout(hoverTimer);
+        iconSpan.textContent = "•";
+        iconSpan.style.color = "black";
+        iconSpan.style.fontSize = "inherit";
+        iconSpan.style.fontWeight = "normal";
+      });
+
+      iconSpan.addEventListener("click", () => {
+        if (iconSpan.textContent === "삭제") {
+          logList.removeChild(li);
+          selectedSymbols.splice(index, 1);
+        }
+      });
+    }
+
+
+
+    // O/△/X 선택 시
+    function selectSymbol(event, symbol) {
+      const optionSpan = event.currentTarget.parentElement;
+      const index = parseInt(optionSpan.getAttribute("data-index"));
+
+      selectedSymbols[index] = symbol;
+
+      optionSpan.querySelectorAll("span").forEach(span => {
+        span.classList.toggle("selected", span.textContent === symbol);
+      });
+
+      if (document.getElementById("log-date").textContent === "today") {
+        updateTodayChart(selectedSymbols);
+        updateFeedback(); // ✅ 실시간 반영
+      }
+    }
+
+    // 운동명 입력 시
+    document.addEventListener("input", (e) => {
+      if (e.target.classList.contains("record-text") &&
+          document.getElementById("log-date").textContent === "today") {
+        updateFeedback(); // ✅ 실시간 반영
+      }
+    });
+
+
+
+
+    const getScore = s => s === "O" ? 100 : s === "△" ? 50 : 0;
+    const getColorByScore = score => {
+      if (score === 0) return "#FFFFFF";
+      const alpha = Math.min(score / 100, 1);
+      return `rgba(12, 158, 249, ${alpha.toFixed(2)})`;
+    };
+
+    function saveTodayRecord() {
+      const recordTextInputs = document.querySelectorAll(".record-text");
+      const symbols = selectedSymbols.filter(s => ["O", "△", "X"].includes(s));
+      const texts = [...recordTextInputs].map(input => input.value);
+      const memo = document.querySelector(".memo-input").value;
+
+      // 운동 계획이 있는 경우 → 모든 운동명 입력 필수
+      const hasAnyLine = recordTextInputs.length > 0;
+      const allLinesFilled = texts.every(text => text.trim() !== "");
+      if (hasAnyLine && !allLinesFilled) {
+        alert("모든 수행 운동 이름을 입력해주세요.");
+        return; // 여기서 그냥 종료, DOM 변경 없음
+      }
+
+      // 모든 운동 계획에 O/△/X 선택 필수
+      const allSymbolsSelected = selectedSymbols.length > 0 &&
+        selectedSymbols.every(s => ["O", "△", "X"].includes(s));
+      if (hasAnyLine && !allSymbolsSelected) {
+        alert("모든 수행 운동에 O/△/X를 선택해주세요.");
+        return; // 여기서도 DOM 변경 없음
+      }
+
+      // 데이터 저장
+      const data = JSON.parse(localStorage.getItem("records") || "{}");
+      data[today] = {
+        symbols,
+        texts,
+        memo,
+        img: [...uploadedImages]
+      };
+
+      localStorage.setItem("records", JSON.stringify(data));
+
+      updateTodayChart(symbols);
+      updateWeeklyChart(data);
+      updatemonthly(data);
+      updateFeedback();
+
+      const score = symbols.length
+        ? symbols.reduce((sum, s) => sum + getScore(s), 0) / symbols.length
+        : 0;
+      const mainFeedback = getMainFeedback(score);
+      const extraFeedback = getConditionalFeedback();
+      
+      alert("모든 기록이 저장되었습니다. 오늘도 수고하셨습니다 😎");
+    
+      updateFeedback(); 
+    }
+
+
+
+    function updateTodayChart(symbols) {
+      const score = symbols.length ? symbols.reduce((sum, s) => sum + getScore(s), 0) / symbols.length : 0;
+      const canvas = document.getElementById("circleChart");
+      const ctx = canvas.getContext("2d");
+      const r = canvas.width / 2 - 10, c = canvas.width / 2;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath(); ctx.arc(c, c, r, 0, 2 * Math.PI); ctx.strokeStyle = "#eee"; ctx.lineWidth = 20; ctx.stroke();
+      const endAngle = (score / 100) * 2 * Math.PI;
+      ctx.beginPath(); ctx.arc(c, c, r, -Math.PI / 2, endAngle - Math.PI / 2); ctx.strokeStyle = "#9ADBF6"; ctx.lineWidth = 20; ctx.stroke();
+      ctx.fillStyle = "#000"; ctx.font = "bold 20px Pretendard"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText(`${Math.round(score)}점`, c, c);
+    }
+
+    function updateRightPanel(dateStr) {
+      const isToday = dateStr === today;
+      const logDate = document.getElementById("log-date");
+
+      if (isToday) {
+        logDate.textContent = "today";
+        document.getElementById("save-btn").style.display = "inline-block";
+        document.getElementById("edit-btn").style.display = "inline-block"; 
+        document.getElementById("delete-btn").style.display = "inline-block"; 
+      } else {
+        const formatted = formatDate(dateStr);
+        logDate.textContent = `지난 기록(${formatted})`;
+        document.getElementById("save-btn").style.display = "none";
+        document.getElementById("edit-btn").style.display = "inline-block";
+        document.getElementById("delete-btn").style.display = "inline-block";
+      }
+
+      const data = JSON.parse(localStorage.getItem("records") || "{}");
+      const record = data[dateStr] || {};
+      const symbols = record.symbols || [];
+      const texts = record.texts || [];
+
+      selectedSymbols = [];
+      logList.innerHTML = "";
+
+      // 저장된 데이터만 줄 생성 (빈 줄 없음)
+      if (texts.length > 0) {
+        texts.forEach((t, i) => addRecordLine(symbols[i], t));
+      } else {
+        addRecordLine(); // 기본 한 줄
+      }
+
+      document.querySelector(".memo-input").value = record.memo || "";
+      uploadedImages = Array.isArray(record.img) ? record.img : [];
+      renderImagePreviews();
+
+      if (isToday) updateTodayChart(symbols);
+    }
+
+
+
+
+    let weeklyChartInstance = null;
+    function updateWeeklyChart(data) {
+      const start = new Date(currentWeekStart);
+      const day = (start.getDay() + 6) % 7;
+      start.setDate(start.getDate() - day);
+
+      const labels = [];
+      const scores = [];
+
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(start);
+        d.setDate(start.getDate() + i);
+        const key = d.toISOString().slice(0, 10);
+        labels.push(`${d.getMonth() + 1}.${d.getDate()}`);
+
+        const record = data[key] || {};
+        const symbols = record.symbols || record;
+        const score = symbols.length > 0 ? symbols.reduce((sum, s) => sum + getScore(s), 0) / symbols.length : 0;
+        scores.push(score);
+      }
+
+      if (weeklyChartInstance && weeklyChartInstance.destroy) weeklyChartInstance.destroy();
+      const ctx = document.getElementById("weeklyChart").getContext("2d");
+
+      weeklyChartInstance = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [{ label: "이번 주 평균 점수", data: scores, backgroundColor: "#9ADBF6" }]
+        },
+        options: {
+          responsive: true,
+          onClick: (evt, elements) => {
+            if (elements.length > 0) {
+              const index = elements[0].index;
+              const clickedDate = new Date(start);
+              clickedDate.setDate(start.getDate() + index);
+              const dateStr = clickedDate.toISOString().slice(0, 10);
+              updateRightPanel(dateStr);
+            }
+          },
+          scales: { y: { beginAtZero: true, max: 100 } }
+        }
+      });
+
+      // 주간
+      const weekHeader = document.getElementById("weekly-header");
+      const end = new Date(start);
+      end.setDate(start.getDate() + 6);
+      weekHeader.textContent = `${start.getMonth() + 1}.${start.getDate()} ~ ${end.getMonth() + 1}.${end.getDate()}`;
+    }
+
+    function updatemonthly(data) {
+      const tbody = document.getElementById("monthly-body");
+      const header = document.getElementById("monthly-header");
+      const monthlyTable = document.querySelector(".monthly");
+      tbody.innerHTML = "";
+
+      const year = currentMonth.getFullYear();
+      const month = currentMonth.getMonth();
+
+      header.textContent = `${year}.${month + 1}`;
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const lastDate = new Date(year, month + 1, 0).getDate();
+
+      let cellCount = 0;
+      let weekCount = Math.ceil((firstDay + lastDate) / 7); // 이번 달 주 수 계산
+
+      // 주 수에 따른 크기 조정
+      if (weekCount >= 5) {
+        monthlyTable.style.transform = "scale(0.88)"; // 비율 축소
+        monthlyTable.style.transformOrigin = "top center"; // 위쪽 기준
+        monthlyTable.style.marginBottom = "-30px"; // 아래 공간 줄이기
+      } else {
+        monthlyTable.style.transform = "scale(1)";
+        monthlyTable.style.marginBottom = "0";
+      }
+
+      let row = document.createElement("tr");
+
+      for (let i = 0; i < firstDay; i++) {
+        row.appendChild(document.createElement("td"));
+        cellCount++;
+      }
+
+      for (let d = 1; d <= lastDate; d++) {
+        const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+        const cell = document.createElement("td");
+        cell.textContent = d;
+
+        const record = data[dateStr];
+        if (record && Array.isArray(record.symbols)) {
+          const score = record.symbols.reduce((sum, s) => sum + getScore(s), 0) / record.symbols.length;
+          cell.style.backgroundColor = getColorByScore(score);
+        }
+
+        cell.addEventListener("click", () => updateRightPanel(dateStr));
+        row.appendChild(cell);
+        cellCount++;
+
+        if (cellCount % 7 === 0) {
+          tbody.appendChild(row);
+          row = document.createElement("tr");
+        }
+      }
+
+      if (cellCount % 7 !== 0) {
+        for (let i = cellCount % 7; i < 7; i++) {
+          row.appendChild(document.createElement("td"));
+        }
+        tbody.appendChild(row);
+      }
+    }
+
+
+
+    function handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        document.getElementById("image-preview-in-memo").innerHTML = `
+          <img src="${e.target.result}" alt="업로드된 이미지"/>
+          <button class="delete-image-btn" onclick="removeImage()">X</button>
+        `;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeImage() {
+      document.getElementById("image-preview-in-memo").innerHTML = "";
+    }
+
+   document.getElementById("edit-btn").addEventListener("click", () => {
+      let dateStr;
+
+      const logDateText = document.getElementById("log-date").textContent;
+      if (logDateText === "today") {
+        dateStr = today;
+      } else {
+        const match = logDateText.match(/\((\d{4})\.(\d{2})\.(\d{2})\)/);
+        if (match) {
+          dateStr = `${match[1]}-${match[2]}-${match[3]}`;
+        }
+      }
+
+      if (!dateStr) return;
+
+      saveOrUpdateRecord(dateStr);
+
+      // 마지막으로 본 날짜 저장
+      localStorage.setItem("lastViewedDate", dateStr);
+
+      // 새로고침
+      location.reload();
+    });
+
+
+
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        const tabId = btn.dataset.tab;
+
+        // 현재 탭 저장
+        localStorage.setItem("lastViewedTab", tabId);
+
+        document.querySelectorAll(".tab-content").forEach(tab => {
+          tab.classList.toggle("active", tab.id === tabId);
+        });
+
+
+
+        document.querySelectorAll(".tab-content").forEach(tab => {
+          tab.classList.toggle("active", tab.id === tabId);
+        });
+
+        const feedbackSection = document.getElementById("feedback-section");
+        if (tabId === "today") {
+          feedbackSection.style.display = "flex"; 
+        } else {
+          feedbackSection.style.display = "none";
+        }
+
+        const recordData = JSON.parse(localStorage.getItem("records") || "{}");
+
+        if (tabId === "week") {
+          setTimeout(() => updateWeeklyChart(recordData), 50);
+        } else if (tabId === "month") {
+          updatemonthly(recordData);
+        } else if (tabId === "today") {
+
+          updateRightPanel(today);
+          updateTodayChart(selectedSymbols);
+        }
+      });
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const saveBtn = document.getElementById("save-btn");
+      const editBtn = document.getElementById("edit-btn");
+      const deleteBtn = document.getElementById("delete-btn");
+
+      // 마지막으로 본 탭과 날짜 가져오기
+      const lastViewedTab = localStorage.getItem("lastViewedTab") || "today";
+      const lastViewedDate = localStorage.getItem("lastViewedDate");
+
+      // 탭 버튼 상태 복원
+      document.querySelectorAll(".tab-btn").forEach(b => {
+        b.classList.toggle("active", b.dataset.tab === lastViewedTab);
+      });
+
+      document.querySelectorAll(".tab-content").forEach(tab => {
+        tab.classList.toggle("active", tab.id === lastViewedTab);
+      });
+
+      // 기록 패널 복원
+      if (lastViewedDate) {
+        updateRightPanel(lastViewedDate);
+        localStorage.removeItem("lastViewedDate");
+      } else {
+        updateRightPanel(today);
+      }
+
+      // 🔹 주간/월별 탭이면 차트도 갱신
+      const recordData = JSON.parse(localStorage.getItem("records") || "{}");
+      if (lastViewedTab === "week") {
+        updateWeeklyChart(recordData);
+      } else if (lastViewedTab === "month") {
+        updatemonthly(recordData);
+      }
+
+      // 저장 버튼
+      if (saveBtn) {
+        saveBtn.addEventListener("click", () => {
+          saveOrUpdateRecord(today);
+        });
+      }
+
+      // 수정 버튼
+      if (editBtn) {
+        editBtn.addEventListener("click", () => {
+          let dateStr;
+          if (document.getElementById("log-date").textContent === "today") {
+            dateStr = today;
+          } else {
+            const match = document.getElementById("log-date").textContent.match(/\((\d{4}-\d{2}-\d{2})\)/);
+            dateStr = match ? match[1] : null;
+          }
+          if (!dateStr) return;
+          saveOrUpdateRecord(dateStr);
+        });
+      }
+
+      // 삭제 버튼
+      if (deleteBtn) {
+        deleteBtn.addEventListener("click", () => {
+          let dateStr;
+          if (document.getElementById("log-date").textContent === "today") {
+            dateStr = today;
+          } else {
+            const match = document.getElementById("log-date").textContent.match(/\((.*?)\)/);
+            dateStr = match ? match[1] : null;
+          }
+          if (!dateStr) return;
+          if (confirm(`${dateStr} 기록을 삭제하시겠습니까?`)) {
+            const data = JSON.parse(localStorage.getItem("records") || "{}");
+            delete data[dateStr];
+            localStorage.setItem("records", JSON.stringify(data));
+            alert("기록이 삭제되었습니다!");
+            updateRightPanel(dateStr);
+          }
+        });
+      }
+    
+
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // 기존 save-btn, edit-btn, delete-btn 이벤트 등록들...
+
+        // 운동명 입력 시 즉시 feedback 갱신
+        document.addEventListener("input", (e) => {
+          if (e.target.classList.contains("record-text") &&
+              document.getElementById("log-date").textContent === "today") {
+            updateFeedback(); // 최신 입력값 기반
+          }
+        });
+      });
+    });
+
+
+
+    // 오늘 데이터 불러오기
+    const recordData = JSON.parse(localStorage.getItem("records") || "{}");
+    const record = recordData[today] || {};
+    const todaySymbols = Array.isArray(record.symbols) ? record.symbols : [];
+
+    // 오른쪽 화면 초기화
+    logList.innerHTML = ""; // 기존 줄 비우기
+    if (todaySymbols.length > 0) {
+      selectedSymbols = [...todaySymbols];
+      todaySymbols.forEach((s, i) => addRecordLine(s, record.texts ? record.texts[i] : ""));
+    } else {
+      // 기본 한 줄 무조건 추가
+      selectedSymbols = [];
+      addRecordLine();
+    }
+
+    updateTodayChart(todaySymbols);
+    document.querySelector(".memo-input").value = record.memo || "";
+    uploadedImages = Array.isArray(record.img) ? record.img : [];
+    renderImagePreviews();
+
+
+    // 메모/이미지도 불러오기
+    document.querySelector(".memo-input").value = record.memo || "";
+    const preview = document.getElementById("image-preview");
+    if (record.img) {
+      preview.innerHTML = `<img src="${record.img}" style="max-width: 100%; border-radius: 8px; margin-top: 8px;" alt="업로드된 이미지"/>`;
+    } else {
+      preview.innerHTML = "";
+    }
+
+    function changeMonth(delta) {
+      currentMonth.setMonth(currentMonth.getMonth() + delta);
+      const recordData = JSON.parse(localStorage.getItem("records") || "{}");
+      updatemonthly(recordData);
+    }
+
+    function changeWeek(delta) {
+      currentWeekStart.setDate(currentWeekStart.getDate() + delta * 7);
+      const recordData = JSON.parse(localStorage.getItem("records") || "{}");
+      updateWeeklyChart(recordData);
+    }
+
+    function loadRecordForDate(dateStr) {
+      const record = JSON.parse(localStorage.getItem('record-' + dateStr));
+      if (record) {
+        displayCircleState(record.state); // OX표시
+
+        document.getElementById('memo').value = record.memo; // 메모표시
+
+        if (record.imageDataUrl) {
+          showImage(record.imageDataUrl); // 이미지표시
+        }
+
+        const isToday = dateStr === getTodayStr(); //다시 체크ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ오늘 아니면 입력/버튼 비활성화
+        toggleInputEditable(isToday);
+        
+        // 피드백 표시(오늘창에서만 적용)
+        if (isToday) {
+          updateFeedback();
+        } else {
+          hideFeedback();
+        }
+      } else {
+        clearAllInputs();
+      }
+    }
+
+    function getTodayStr() {
+      const today = new Date();
+      return today.toISOString().split('T')[0];
+    }
+
+    function toggleInputEditable(isEditable) {
+      document.getElementById('memo').readOnly = !isEditable;
+      document.getElementById('save-button').disabled = !isEditable;
+
+      document.querySelectorAll('.state-button').forEach(btn => {
+        btn.disabled = !isEditable;
+      });
+
+      document.getElementById('photo-input').disabled = !isEditable;
+    }
+
+    function hideFeedback() {
+      document.querySelector('#feedback-section').style.display = 'none';
+    }
+
+    function getMainFeedback(score) {
+      if (score >= 90) return "🎉 대단해요! 꾸준한 운동 습관이 형성되어 가고 있어요. 지금 페이스를 유지해보세요!";
+      if (score >= 75) return "👍 좋은 흐름이에요! 약간의 아쉬운 날도 있지만 전체적으로 훌륭해요. 조금만 더 집중해봐요!";
+      if (score >= 60) return "💪 중간은 했어요! 그래도 개선 여지가 보여요. 실패한 날을 돌아보고 다음엔 성공해봐요.";
+      if (score >= 40) return "😐 아쉬운 한 주였어요. △를 ○로 바꾸기 위한 전략을 세워보면 좋을 것 같아요.";
+      if (score >= 20) return "🌀 약간 흔들렸네요. 쉬어가는 것도 좋지만 다시 루틴을 재정비해봐요. 짧은 목표부터 시작해도 좋아요!";
+      return "🫣 거의 운동을 하지 못했어요. 무리한 계획은 아니었나요? 작게라도 실천할 수 있는 계획을 세워보는 건 어때요?";
+    }
+
+
+    function getConditionalFeedback() {
+      const data = JSON.parse(localStorage.getItem("records") || "{}");
+      const dates = Object.keys(data).sort();
+      const todayStr = getTodayStr();
+      const todayIdx = dates.indexOf(todayStr);
+
+      if (todayIdx < 0) return "";
+
+      const recent = dates.slice(Math.max(0, todayIdx - 2), todayIdx + 1);
+      const prev = dates.slice(Math.max(0, todayIdx - 1), todayIdx + 1);  
+      const todaySymbols = data[todayStr]?.symbols || [];
+      const yesterdaySymbols = data[dates[todayIdx - 1]]?.symbols || [];
+
+      const toScoreArr = arr => arr.map(getScore);
+      const toCount = (arr, s) => arr.filter(e => e === s).length;
+
+      const feedbacks = [];
+
+      if (recent.length === 3 && recent.every(d => toCount(data[d]?.symbols || [], "O") >= 1)) {
+        feedbacks.push("🌟 3일 연속 성공! 습관이 만들어지고 있어요. 이 흐름을 계속 이어가 봐요!");
+      }
+
+      if (prev.length === 2 && prev.every(d => toCount(data[d]?.symbols || [], "X") >= 1)) {
+        feedbacks.push("⏳ 조금 쉬었나 봐요. 괜찮아요, 누구에게나 그런 날은 있어요. 다시 가볍게 시작해볼까요?");
+      }
+
+      if (toCount(todaySymbols, "△") > toCount(todaySymbols, "O")) {
+        feedbacks.push("🧩 완벽하진 않았지만 시도한 점이 중요해요! △를 ○로 바꿀 수 있는 요인을 한번 고민해봐요.");
+      }
+
+      if (yesterdaySymbols.includes("O") && todaySymbols.includes("X")) {
+        feedbacks.push("📉 한 날은 잘하고, 다음 날은 쉬고 반복하고 있어요. 운동 강도를 조절하거나 쉬는 날을 계획해보는 것도 방법이에요!");
+      }
+
+      if (toCount(todaySymbols, "X") >= 2 && data[todayStr]?.memo?.trim()) {
+        feedbacks.push("✍️ 기록을 남긴 건 멋진 습관이에요! 실천이 안 된 이유를 통해 다음 전략을 짜볼 수 있어요.");
+      }
+
+      return feedbacks.join("<br>");
+    }
+
+    function handleImageUpload(event) {
+      const files = Array.from(event.target.files);
+      if (files.length === 0) return;
+
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const src = e.target.result;
+          uploadedImages.push(src);
+          renderImagePreviews();
+        };
+        reader.readAsDataURL(file);
+      });
+
+      event.target.value = "";
+    }
+
+    function renderImagePreviews() {
+      const container = document.getElementById("image-preview-in-memo");
+      container.innerHTML = "";
+      uploadedImages.forEach((src, index) => {
+        const wrapper = document.createElement("div");
+        wrapper.classList.add("preview-wrapper");
+        wrapper.innerHTML = `
+          <img src="${src}" alt="업로드 이미지" onclick="openImageModal('${src}')">
+          <button class="delete-image-btn" onclick="deleteImage(${index})">X</button>
+        `;
+        container.appendChild(wrapper);
+      });
+    }
+
+
+    const imgSrcList = [...uploadedImages]; // 저장할 이미지 배열
+
+    const data = JSON.parse(localStorage.getItem("records") || "{}");
+    data[today] = {
+      symbols,
+      texts,
+      memo,
+      img: uploadedImages
+    };
+
+
+    function deleteImage(index) {
+      uploadedImages.splice(index, 1);
+      renderImagePreviews();
+    }
+
+   function openImageModal(src) {
+    const modal = document.getElementById("image-modal");
+    const modalImg = document.getElementById("modal-img");
+
+    modalImg.src = src;
+    modal.style.display = "flex";
+
+    // 모달을 클릭하면 닫히도록 설정 (중복 방지 위해 먼저 removeEventListener 후 add)
+    modal.onclick = () => {
+      modal.style.display = "none";
+    };
+  }
+
+
+
+
+
+
+
+
+    function formatDate(dateStr) {
+      const [year, month, day] = dateStr.split("-");
+      return `${year}.${month}.${day}`;
+    }
+
+    function saveOrUpdateRecord(dateStr) {
+      const recordTextInputs = document.querySelectorAll(".record-text");
+      const symbols = [];
+      const texts = [];
+
+      recordTextInputs.forEach((input, i) => {
+        const text = input.value.trim();
+        const symbol = selectedSymbols[i];
+        if (text !== "") {
+          texts.push(text);
+          symbols.push(symbol);
+        }
+      });
+
+      const hasAnyLine = texts.length > 0;
+      const allSymbolsSelected = symbols.every(s => ["O", "△", "X"].includes(s));
+
+      if (hasAnyLine && !allSymbolsSelected) {
+        alert("모든 수행 운동에 O/△/X를 선택해주세요.");
+        return;
+      }
+
+      if (hasAnyLine && texts.some(t => t === "")) {
+        alert("모든 수행 운동 이름을 입력해주세요.");
+        return;
+      }
+
+      const memo = document.querySelector(".memo-input").value;
+      const data = JSON.parse(localStorage.getItem("records") || "{}");
+
+      // 해당 날짜에 저장
+      data[dateStr] = {
+        symbols,
+        texts,
+        memo,
+        img: [...uploadedImages]
+      };
+
+      localStorage.setItem("records", JSON.stringify(data));
+    }
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("save-btn").addEventListener("click", () => {
+        saveOrUpdateRecord(today);
+      });
+
+      document.getElementById("edit-btn").addEventListener("click", () => {
+        const dateStr = document.getElementById("log-date").textContent.match(/\((.*?)\)/)?.[1];
+        if (dateStr) saveOrUpdateRecord(dateStr);
+      });
+
+      document.getElementById("delete-btn").addEventListener("click", () => {
+        const isTodayLog = document.getElementById("log-date").textContent === "today";
+        const dateStr = isTodayLog
+          ? today
+          : document.getElementById("log-date").textContent.match(/\((.*?)\)/)?.[1];
+
+        if (!dateStr) return;
+
+        if (confirm(`${dateStr} 기록을 초기화하시겠습니까?`)) {
+          const data = JSON.parse(localStorage.getItem("records") || "{}");
+          delete data[dateStr];
+          localStorage.setItem("records", JSON.stringify(data));
+          alert("기록이 초기화되었습니다!");
+          updateRightPanel(dateStr);
+        }
+      });
+    });
+
+    function calculateScoreFromTodayRecord() {
+      const recordTextInputs = document.querySelectorAll(".record-text");
+      const symbols = selectedSymbols.filter(s => ["O", "△", "X"].includes(s));
+
+      if (symbols.length === 0) return 0;
+
+      const score = symbols.reduce((sum, s) => sum + getScore(s), 0) / symbols.length;
+      return score;
+    }
+
+
+    function updateFeedback() {
+      const score = calculateScoreFromTodayRecord();
+      const mainFeedback = getMainFeedback(score);
+
+      const feedbackContainer = document.querySelector('#feedback-section .balloon-text');
+      if (feedbackContainer) {
+        feedbackContainer.innerHTML = mainFeedback; // ✅ 추가 피드백 제거
+      }
+    }
+
+
+
+
+    // 차트 및 기록 표시
+    updateTodayChart(todaySymbols);
+    updateWeeklyChart(recordData);
+
+  </script>
+  
