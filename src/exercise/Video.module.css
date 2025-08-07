@@ -1,0 +1,280 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    background-color: #9adaf62b;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+}
+
+.header h1 {
+    font-size: 32px;
+    transform: translate(-320px, -12px);
+    cursor: pointer;
+}
+
+.tab {
+    display: flex;
+    gap: 560px;
+    list-style: none;
+    text-decoration: none;
+    font-size: 26px;
+    transform: translateY(4px);
+}
+
+.active {
+    font-weight: 600;
+    border-bottom: 3px solid black;
+    padding-bottom: 8px;
+    cursor: pointer;
+}
+
+.inactive {
+    cursor: pointer;
+}
+
+.profileIcon {
+    width: 48px;
+    height: 48px;
+    background-image: url("../profileIcon.png");
+    background-position: center center;
+    background-size: cover;
+    border: 3px solid black;
+    border-radius: 50%;
+    transform: translateX(320px);
+    cursor: pointer;
+}
+
+.profile {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 128px;
+    height: 112px;
+    border: 3px solid black;
+    background-color: white;
+    border-radius: 16px;
+    transform: translate(968px, 96px);
+    font-size: 20px;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.p1 {
+    padding: 4px 28px 4px 0px;
+    width: 104px;
+    text-align: right;
+}
+
+.p2,
+.p3 {
+    padding: 4px 16px 4px 0px;
+    width: 116px;
+    text-align: right;
+}
+
+.p1,
+.p2 {
+    border-bottom: 3px solid black;
+}
+
+.p3 {
+    transform: translateY(-2px);
+}
+
+.prf {
+    position: absolute;
+    width: 20px;
+    transform: translate(-32px, 4px);
+}
+
+.videoIcon {
+    position: absolute;
+    width: 28px;
+    transform: translate(-34px, 4px);
+}
+
+.logout {
+    position: absolute;
+    width: 20px;
+    transform: translate(-28px, 6px);
+}
+
+.accordion {
+    display: flex;
+    flex-direction: column;
+    transform: translate(-512px, 44px);
+}
+
+.toggleBtn{
+    display: flex;
+    align-items: center;
+    width: 320px;
+    height: 68px;
+    border: 3px solid black;
+    border-radius: 24px;
+    background-color: white;
+    margin-bottom: 28px;
+}
+
+.checkbox {
+    position: absolute;
+    z-index: 20;
+    width: 22px;
+    height: 22px;
+    transform: translate(14px, 23px);
+}
+
+.toggleTitle{
+    position: relative;
+    z-index: 20;
+    font-size: 24px;
+    transform: translate(42px, -2px);
+}
+
+.toggleArrow {
+    transform: scaleY(0.6) translate(192px, -2px);
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.toggleContent{
+    position: absolute;
+    width: 315px;
+    height: 240px;
+    border: 3px solid black;
+    border-top: none;
+    background-color: white;
+    transform: translateY(-50px);
+    overflow-y: scroll;
+    z-index: 18;
+}
+
+.toggleInner{
+    font-size: 20px;
+    padding: 20px;
+}
+
+.title1, .title2,
+.title3 {
+    position: relative;
+    font-size: 24px;
+    transform: translateY(-2px);
+    padding: 24px;
+}
+
+.title1{
+    z-index: 16;
+}
+
+.title2{
+    z-index: 12;
+}
+
+.title3{
+    z-index: 8;
+}
+
+.arrow {
+    transform: scaleY(0.6) translate(144px, -2px);
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.content1, .content2,
+.content3 {
+    position: absolute;
+    width: 315px;
+    height: 200px;
+    border: 3px solid black;
+    border-top: none;
+    background-color: white;
+    transform: translateY(-50px);
+    overflow-y: scroll;
+    z-index: 14;
+}
+
+.content1{
+    z-index: 14;
+}
+
+.content2{
+    z-index: 10;
+}
+
+.content3{
+    z-index: 6;
+}
+
+.inner {
+    font-size: 20px;
+    padding: 20px;
+}
+
+.music{
+    width: 315px;
+    height: 120px;
+    border: 3px solid black;
+    border-radius: 24px;
+    background-color: white;
+}
+
+.music select{
+    height: 28px;
+    font-size: 16px;
+    padding-left: 4px;
+    border-radius: 4px;
+    transform: translate(24px, -8px);
+}
+
+.musicIcon{
+    width: 42px;
+    height: 44px;
+    transform: translate(48px, 6px);
+}
+
+.video{
+    position: absolute;
+    width: 900px;
+    height: 506px;
+    border: 1px solid black;
+    background-color: white;
+    transform: translate(-80px, -464px);
+}
+
+.save{
+    position: absolute;
+    width: 32px;
+    height: 36px;
+    fill: none;
+    stroke-width: 1px;
+    stroke: black;
+    transform: translate(794px, 56px);
+}
+
+.delete{
+    position: absolute;
+    width: 32px;
+    height: 36px;
+    fill: #fff7aa;
+    stroke-width: 1px;
+    stroke: black;
+    transform: translate(794px, 56px);
+}
+
+.musicBox{
+    position: absolute;
+    transform: translate(10px, 444px);
+}

@@ -1,0 +1,64 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    background-color: #9adaf62b;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.header{
+    position: absolute;
+    transform: translateY(-192px);
+    font-size: 40px;
+    margin-bottom: 72px;
+    font-weight: bold;
+}
+
+.container input{
+    width: 288px;
+    height: 40px;
+    padding-left: 20px;
+    border-radius: 8px;
+    margin-bottom: 40px;
+    transform: translateY(36px);
+}
+
+.Name, .Password,
+.ConfirmPassword {
+    border: 1px solid black;
+}
+
+.Email{
+    border: 1px solid #B2B2B2;
+}
+
+.saveBtn{
+    font-size: 14px;
+    width: 48px;
+    height: 28px;
+    border-width: 1px;
+    border-radius: 8px;
+    transform: translate(130px, 36px);
+}
+
+.showPwIcon svg {
+    position: absolute;
+    height: 20px;
+    fill: none;
+    stroke: #9b9b9b;
+    transform: translate(116px, -35px);
+}
+
+.showConfirmIcon svg {
+    position: absolute;
+    height: 20px;
+    fill: none;
+    stroke: #9b9b9b;
+    transform: translate(116px, -35px);
+}
