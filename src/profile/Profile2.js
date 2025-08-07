@@ -10,8 +10,15 @@ function Profile2() {
         hour: "", minute: "",
         purpose: "",
         frequency: "",
-        part: [], 
+        part: [],
     });
+
+    useEffect(() => {
+        const stored = localStorage.getItem("information");
+        if (stored) {
+            setData(JSON.parse(stored));
+        }
+    }, []);
 
     const handleInputChange = (key, value) => {
         setData(prev => ({ ...prev, [key]: value }));
@@ -120,17 +127,17 @@ function Profile2() {
                     <ul>
                         {["재활", "체력 향상", "다이어트 및 체형 유지", "활력", "기타"]
                             .map((item, index) => (
-                            <li key={index}>
-                                <input
-                                    type="radio"
-                                    name="select"
-                                    id={`s${index}`}
-                                    checked={data.purpose === item}
-                                    onChange={() => handleInputChange("purpose", item)}
-                                />
-                                <label htmlFor={`s${index}`}>{item}</label>
-                            </li>
-                        ))}
+                                <li key={index}>
+                                    <input
+                                        type="radio"
+                                        name="select"
+                                        id={`s${index}`}
+                                        checked={data.purpose === item}
+                                        onChange={() => handleInputChange("purpose", item)}
+                                    />
+                                    <label htmlFor={`s${index}`}>{item}</label>
+                                </li>
+                            ))}
                     </ul>
                 </section>
             </div>
@@ -154,17 +161,17 @@ function Profile2() {
                 <section className={styles.part}>
                     <h1>주요 부위</h1>
                     <ul>
-                    {["상체", "하체", "복부", "전신"].map((part, index) => (
-                        <li key={index}>
-                            <input
-                                type="checkbox"
-                                name="select"
-                                id={`p${index}`}
-                                checked={data.part.includes(part)}
-                                onChange={() => handleCheckChange(part)}
-                            /><label htmlFor={`p${index}`}>{part}</label>
-                        </li>
-                    ))}
+                        {["상체", "하체", "복부", "전신"].map((part, index) => (
+                            <li key={index}>
+                                <input
+                                    type="checkbox"
+                                    name="select"
+                                    id={`p${index}`}
+                                    checked={data.part.includes(part)}
+                                    onChange={() => handleCheckChange(part)}
+                                /><label htmlFor={`p${index}`}>{part}</label>
+                            </li>
+                        ))}
                     </ul>
                 </section>
             </div>
