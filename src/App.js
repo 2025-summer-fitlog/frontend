@@ -18,10 +18,10 @@ function LogPage() {
 function App() {
   return (
     <Router>
-      <Header />  {/* 항상 상단에 고정 */}
+      <Header /> 
       <Routes>
-        <Route path="/" element={<Home />} />         {/* 홈 페이지 */}
-        <Route path="/log" element={<LogPage />} />   {/* 오늘의 운동 기록 페이지 */}
+        <Route path="/" element={<Home />} />   
+        <Route path="/log" element={<LogPage />} />  
       </Routes>
     </Router>
   );
