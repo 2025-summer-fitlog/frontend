@@ -15,7 +15,7 @@ function Video() {
     const [notice, setNotice] = useState(false);
     const [equipment, setEquipment] = useState(false);
     const [effect, setEffect] = useState(false);
-    const [selected, setSelected] = useState("Fit");
+    const [selectedTab, setSelectedTab] = useState("Fit");
     const [clicked, setClicked] = useState(false);
     const [videoData, setVideoData] = useState(null);
     const [music, setMusic] = useState(null);
@@ -99,14 +99,20 @@ function Video() {
                 <h1 onClick={handleLogoClick}>FitLog</h1>
                 <ul className={styles.tab}>
                     <li
-                        className={selected === "Fit" ? styles.active : styles.inactive}
-                        onClick={() => setSelected("Fit")}
+                        className={selectedTab === "Fit" ? styles.active : styles.inactive}
+                        onClick={() => {
+                            setSelectedTab("Fit");
+                            navigate("/fit");
+                        }}
                     >
                         Fit
                     </li>
                     <li
-                        className={selected === "Log" ? styles.active : styles.inactive}
-                        onClick={() => setSelected("Log")}
+                        className={selectedTab === "Log" ? styles.active : styles.inactive}
+                        onClick={() => {
+                            setSelectedTab("Log");
+                            navigate("/log");
+                        }}
                     >
                         Log
                     </li>

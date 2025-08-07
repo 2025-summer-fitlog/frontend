@@ -11,25 +11,12 @@ function Main() {
     const navigate = useNavigate();
     const [profile, setProfile] = useState(false);
 
-    const handleFitClick = () => {
-        navigate("/fit");
-    }
-
-    const handleProfileClick = () => {
-        navigate("/profile");
-    }
-
-    const handleSaveClick = () => {
-        navigate("/save");
-    }
-
-    const handleLogoutClick = () => {
-        navigate("/");
-    }
-
-    const profileMenu = () => {
-        setProfile((prev) => !prev);
-    }
+    const handleLogClick = () => navigate("/log");
+    const handleFitClick = () => navigate("/fit");
+    const handleProfileClick = () => navigate("/profile");
+    const handleSaveClick = () => navigate("/save");
+    const handleLogoutClick = () => navigate("/");
+    const profileMenu = () => setProfile((prev) => !prev);
 
     return (
         <div className={styles.container}>
@@ -63,7 +50,7 @@ function Main() {
                         className={styles.fitImg}
                     />
                 </div>
-                <div className={styles.Log}>
+                <div className={styles.Log} onClick={handleLogClick}>
                     <h1>Log</h1>
                     <img
                         src={logIcon}

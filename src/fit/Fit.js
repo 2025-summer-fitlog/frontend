@@ -87,13 +87,19 @@ function Fit() {
                 <ul className={styles.tab}>
                     <li
                         className={selectedTab === "Fit" ? styles.active : styles.inactive}
-                        onClick={() => setSelectedTab("Fit")}
+                        onClick={() => {
+                            setSelectedTab("Fit");
+                            navigate("/fit");
+                        }}
                     >
                         Fit
                     </li>
                     <li
                         className={selectedTab === "Log" ? styles.active : styles.inactive}
-                        onClick={() => setSelectedTab("Log")}
+                        onClick={() => {
+                            setSelectedTab("Log");
+                            navigate("/log");
+                        }}
                     >
                         Log
                     </li>
