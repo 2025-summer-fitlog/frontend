@@ -19,17 +19,18 @@ function Login() {
             const response = await fetch("http://fitlog-2025.duckdns.org:8080/api/users/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
+                credentials: "include",
                 body: JSON.stringify({ username, password }),
             });
 
             const data = await response.json();
-            //console.log("로그인 응답:", data);
 
-            if (response.ok) {
-                //const { accessToken } = data;
-                //localStorage.setItem("accessToken", accessToken);
+            if (response.ok) {  
                 const userId = data.id;
+                const userName = data.name;
                 localStorage.setItem("userId", userId);
+                localStorage.setItem("userName", userName);
+                
                 alert("로그인 되었습니다.");
                 navigate("/information");
             } else {

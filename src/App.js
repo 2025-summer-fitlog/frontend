@@ -14,7 +14,6 @@ import Fit from "./fit/Fit";
 import Recommend from "./exercise/Recommend";
 import Video from "./exercise/Video";
 import Save from "./exercise/Save";
-//import Logpage from "./exercise/LogPage";
 
 function App() {
   return (

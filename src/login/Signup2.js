@@ -41,6 +41,7 @@ function Signup() {
             const data = await response.json();
 
             if (response.ok) {
+                localStorage.setItem("userName", name);
                 alert("회원가입 되었습니다. 로그인을 진행해주세요.");
                 navigate("/");
             } else {

@@ -12,36 +12,14 @@ function Profile1() {
     const [changePassword, setChangePassword] = useState(false);
 
     useEffect(() => {
-        const getUserInfo = async () => {
-            try {
-                const response = await fetch("http://fitlog-2025.duckdns.org:8080/api/profile/personal-info", {
-                    method: "GET",
-                    headers: { "Content-Type": "application/json" }
-                });
+        const storedName = localStorage.getItem("userName");
+        const storedEmail = localStorage.getItem("signupEmail");
 
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    console.error("서버 응답 오류:", errorText);
-                    alert("사용자 정보를 불러오지 못했습니다.");
-                    return;
-                }
-
-                if (!response.ok) throw new Error("정보를 불러오지 못하였습니다.");
-
-                const data = await response.json();
-                setForm(prev => ({
-                    ...prev,
-                    name: data.name,
-                    email: data.email
-                }));
-                setChangePassword(data.changePassword);
-            } catch (error) {
-                console.log("에러: ", error);
-                alert("정보를 불러오는 데 실패하였습니다.");
-            }
-        };
-
-        getUserInfo();
+        setForm(prev => ({
+            ...prev,
+            name: storedName || "",
+            email: storedEmail || ""
+        }));
     }, []);
 
     const handleChange = (e) => {
@@ -69,7 +47,7 @@ function Profile1() {
 
             if (!response.ok) throw new Error("정보를 저장하지 못하였습니다.");
 
-            const data = await response.json();
+            await response.json();
             alert("정보가 저장되었습니다.");
             setForm(prev => ({
                 ...prev,
@@ -77,7 +55,7 @@ function Profile1() {
                 confirmPassword: ""
             }));
         } catch (error) {
-            alert("정보 저장에 실패하였습니다.");
+            alert("정보를 저장하는 데 실패하였습니다: " + error.message);
         }
     };
 
@@ -111,26 +89,19 @@ function Profile1() {
                 name="password"
                 value={form.password}
                 onChange={handleChange}
-                readOnly={form && !form.changePassword}
             />
             <span
                 className={styles.showPwIcon}
                 onClick={togglePw}
             >
                 {showPw ? (
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19C7.58 19
-                        3.73 16.11 2 12c.73-1.68 1.87-3.18 3.25-4.36M9.88
-                        9.88A3 3 0 0 1 14.12 14.12M1 1l22 22" />
+                                    3.73 16.11 2 12c.73-1.68 1.87-3.18 3.25-4.36M9.88
+                                    9.88A3 3 0 0 1 14.12 14.12M1 1l22 22" />
                     </svg>
                 ) : (
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path d="M1 12S5 5 12 5s11 7 11 7-4 7-11 7S1 12 1 12z" />
                         <circle cx="12" cy="12" r="3" />
                     </svg>
@@ -143,26 +114,19 @@ function Profile1() {
                 name="confirmPassword"
                 value={form.confirmPassword}
                 onChange={handleChange}
-                readOnly={form && !form.changePassword}
             />
             <span
                 className={styles.showConfirmIcon}
                 onClick={toggleConfirmPw}
             >
                 {showConfirmPw ? (
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19C7.58 19
-                        3.73 16.11 2 12c.73-1.68 1.87-3.18 3.25-4.36M9.88
-                        9.88A3 3 0 0 1 14.12 14.12M1 1l22 22" />
+                                    3.73 16.11 2 12c.73-1.68 1.87-3.18 3.25-4.36M9.88
+                                    9.88A3 3 0 0 1 14.12 14.12M1 1l22 22" />
                     </svg>
                 ) : (
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path d="M1 12S5 5 12 5s11 7 11 7-4 7-11 7S1 12 1 12z" />
                         <circle cx="12" cy="12" r="3" />
                     </svg>
