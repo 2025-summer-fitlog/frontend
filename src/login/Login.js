@@ -34,10 +34,10 @@ function Login() {
                 alert("로그인 되었습니다.");
                 navigate("/information");
             } else {
-                alert("로그인 실패: " + data.message);
+                alert("로그인에 실패하였습니다.");
             }
         } catch (error) {
-            alert("서버 오류: " + error.message);
+            alert("서버 오류: 잠시 후 다시 시도해주세요");
         }
     };
 
@@ -50,7 +50,7 @@ function Login() {
             const url = `${baseUrl}/${provider}`;
             window.location.href = url;
         } catch (error) {
-            alert("소셜 로그인 오류: " + error.message);
+            alert("소셜 로그인 오류: 다시 시도해주세요");
         }
     };
 

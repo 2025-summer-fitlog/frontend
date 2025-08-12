@@ -24,10 +24,10 @@ function FindPw() {
             if (response.ok) {
                 alert(data.message);
             } else {
-                alert("이메일 발송 실패: " + data.message);
+                alert("이메일 발송에 실패하였습니다.");
             }
         } catch (error) {
-            alert("서버 오류: " + error.message);
+            alert("서버 오류: 잠시 후 다시 시도해주세요");
         }
     };
 

@@ -45,10 +45,10 @@ function Signup() {
                 alert("회원가입 되었습니다. 로그인을 진행해주세요.");
                 navigate("/");
             } else {
-                alert("회원가입 실패: " + data.message);
+                alert("회원가입에 실패하였습니다.");
             }
         } catch (error) {
-            alert("서버 오류: " + error.message);
+            alert("서버 오류: 잠시 후 다시 시도해주세요");
         }
     };
 

@@ -28,11 +28,11 @@ function Recommend() {
                 const selected = shuffled.slice(0, Math.min(3, keywords.length));
                 const query = selected.map((k) => encodeURIComponent(k)).join(",");
                 const response = await fetch(`https://fitlog-2025.duckdns.org/fitlog/recommendations?keywords=${query}`);
-                if (!response.ok) throw new Error("추천 영상을 받아오지 못하였습니다.");
+                if (!response.ok) throw new Error("추천 영상을 불러오지 못하였습니다.");
                 const data = await response.json();
                 setRecommend(data);
             } catch (error) {
-                alert("추천 영상을 받아오는 데 실패하였습니다.");
+                alert("추천 영상을 불러오는 데 실패하였습니다.");
             }
         };
 

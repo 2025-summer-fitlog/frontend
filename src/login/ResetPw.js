@@ -57,10 +57,10 @@ function ResetPw() {
                 alert(data.message);
                 navigate("/login");
             } else {
-                alert("오류가 발생했습니다: " + data.message);
+                alert("오류가 발생했습니다.");
             }
         } catch (error) {
-            alert("서버 오류: " + error.message);
+            alert("서버 오류: 잠시 후 다시 시도해주세요");
         }
     };
 

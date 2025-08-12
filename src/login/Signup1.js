@@ -21,10 +21,10 @@ function Signup1() {
             if (response.ok) {
                 alert(data.message);
             } else {
-                alert("코드 전송 실패: " + data.message);
+                alert("코드 전송에 실패하였습니다.");
             }
         } catch (error) {
-            alert("서버 오류: " + error.message);
+            alert("서버 오류: 잠시 후 다시 시도해주세요");
         }
     };
 
@@ -43,10 +43,10 @@ function Signup1() {
                 localStorage.setItem("signupEmail", email);
                 navigate("/signup2");
             } else {
-                alert("코드 인증 실패: " + data.message);
+                alert("코드 인증에 실패하였습니다.");
             }
         } catch (error) {
-            alert("서버 오류: " + error.message);
+            alert("서버 오류: 잠시 후 다시 시도해주세요");
         }
     };
 
