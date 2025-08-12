@@ -36,7 +36,7 @@ function Video() {
     useEffect(() => {
         const getVideoData = async () => {
             try {
-                const response = await fetch(`http://fitlog-2025.duckdns.org:8080/fitlog/recommendations/${id}`);
+                const response = await fetch(`https://fitlog-2025.duckdns.org/fitlog/recommendations/${id}`);
                 if (!response.ok) throw new Error("영상을 불러오지 못하였습니다.");
                 const data = await response.json();
                 setVideoData(data);
@@ -61,7 +61,7 @@ function Video() {
         if (!tagId) return;
 
         try {
-            const response = await fetch(`http://fitlog-2025.duckdns.org:8080/fitlog/tags/${tagId}/music`);
+            const response = await fetch(`https://fitlog-2025.duckdns.org/fitlog/tags/${tagId}/music`);
             if (!response.ok) throw new Error("플레이리스트를 불러오지 못했습니다.");
             const data = await response.json();
             setMusic(data);
@@ -76,7 +76,7 @@ function Video() {
         console.log("userId:", userId);
         console.log("videoId from params:", id);
         try {
-            const response = await fetch(`http://fitlog-2025.duckdns.org:8080/fitlog/users/${userId}/saved-video/${id}`,
+            const response = await fetch(`https://fitlog-2025.duckdns.org/fitlog/users/${userId}/saved-video/${id}`,
                 {
                     method: "POST", 
                     headers: {
@@ -95,7 +95,7 @@ function Video() {
 
     const logout = async () => {
         try {
-            const response = await fetch("http://fitlog-2025.duckdns.org:8080/api/users/logout", {
+            const response = await fetch("https://fitlog-2025.duckdns.org/api/users/logout", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -223,7 +223,7 @@ function Video() {
                     {music && music.url && (
                         <div className={styles.musicBox}>
                             <audio controls>
-                                <source src={`http://fitlog-2025.duckdns.org:8080${music.url}`} type="audio/mpeg"/>
+                                <source src={`https://fitlog-2025.duckdns.org${music.url}`} type="audio/mpeg"/>
                             </audio>
                         </div>
                     )}

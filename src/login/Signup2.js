@@ -32,7 +32,7 @@ function Signup() {
         }
 
         try {
-            const response = await fetch("http://fitlog-2025.duckdns.org:8080/api/users/register", {
+            const response = await fetch("https://fitlog-2025.duckdns.org/api/users/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, username, password, name }),

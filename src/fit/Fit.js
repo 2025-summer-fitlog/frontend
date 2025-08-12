@@ -25,7 +25,7 @@ function Fit() {
     useEffect(() => {
         const getPlace = async () => {
             try {
-                const response = await fetch("http://fitlog-2025.duckdns.org:8080/fitlog/places");
+                const response = await fetch("https://fitlog-2025.duckdns.org/fitlog/places");
                 if (!response.ok) throw new Error("장소 정보를 불러오지 못하였습니다.");
                 const data = await response.json();
                 setPlace(data);
@@ -42,7 +42,7 @@ function Fit() {
         if (placeId !== null) {
             const getExercise = async () => {
                 try {
-                    const response = await fetch(`http://fitlog-2025.duckdns.org:8080/fitlog/exercises/${placeId}`);
+                    const response = await fetch(`https://fitlog-2025.duckdns.org/fitlog/exercises/${placeId}`);
                     if (!response.ok) throw new Error("운동 정보를 불러오지 못하였습니다.");
                     const data = await response.json();
                     setExerciseOption(data);
@@ -82,7 +82,7 @@ function Fit() {
 
     const logout = async () => {
         try {
-            const response = await fetch("http://fitlog-2025.duckdns.org:8080/api/users/logout", {
+            const response = await fetch("https://fitlog-2025.duckdns.org/api/users/logout", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

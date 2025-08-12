@@ -39,7 +39,7 @@ function Profile1() {
         };
 
         try {
-            const response = await fetch("http://fitlog-2025.duckdns.org:8080/api/profile/personal-info", {
+            const response = await fetch("https://fitlog-2025.duckdns.org/api/profile/personal-info", {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body)

@@ -20,7 +20,7 @@ function Main() {
 
     const logout = async () => {
         try {
-            const response = await fetch("http://fitlog-2025.duckdns.org:8080/api/users/logout", {
+            const response = await fetch("https://fitlog-2025.duckdns.org/api/users/logout", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
