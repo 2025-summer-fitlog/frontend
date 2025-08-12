@@ -168,7 +168,12 @@ function Video() {
                         {warmup && videoData && (
                             <div className={styles.toggleContent}>
                                 <div className={styles.toggleInner}>
-                                    <a>{videoData.preparation}</a>
+                                    {videoData.preparation &&
+                                        videoData.preparation
+                                            .split("-").filter(line => line.trim() !== "")
+                                            .map((line, index) => (
+                                                <div key={index}>- {line.trim()}</div>
+                                            ))}
                                 </div>
                             </div>
                         )}
@@ -179,7 +184,12 @@ function Video() {
                         {notice && videoData && (
                             <div className={styles.content1}>
                                 <div className={styles.inner}>
-                                    <a>{videoData.precautions}</a>
+                                    {videoData.precautions &&
+                                        videoData.precautions
+                                            .split("-").filter(line => line.trim() !== "")
+                                            .map((line, index) => (
+                                                <div key={index}>- {line.trim()}</div>
+                                            ))}
                                 </div>
                             </div>
                         )}
@@ -190,7 +200,12 @@ function Video() {
                         {equipment && videoData && (
                             <div className={styles.content2}>
                                 <div className={styles.inner}>
-                                    <a>{videoData.equipment}</a>
+                                    {videoData.equipment &&
+                                        videoData.equipment
+                                            .split("-").filter(line => line.trim() !== "")
+                                            .map((line, index) => (
+                                                <div key={index}>- {line.trim()}</div>
+                                            ))}
                                 </div>
                             </div>
                         )}
@@ -201,7 +216,12 @@ function Video() {
                         {effect && videoData && (
                             <div className={styles.content3}>
                                 <div className={styles.inner}>
-                                    <a>{videoData.effect}</a>
+                                    {videoData.effect &&
+                                        videoData.effect
+                                            .split("-").filter(line => line.trim() !== "")
+                                            .map((line, index) => (
+                                                <div key={index}>- {line.trim()}</div>
+                                            ))}
                                 </div>
                             </div>
                         )}
