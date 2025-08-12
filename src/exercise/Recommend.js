@@ -1,9 +1,9 @@
 import styles from "./Recommend.module.css";
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 import profileIconSmall from "../profileIconSmall.png";
 import videoIcon from "../videoIcon.png";
 import logoutIcon from "../logoutIcon.png";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 function Recommend() {
     const navigate = useNavigate();
