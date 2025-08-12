@@ -130,11 +130,13 @@ function Recommend() {
                     >
                         <div className={styles.title}>{video.title}</div>
                         {video.url && (
-                            <img
-                                className={styles.thumbnail}
-                                src={`https://img.youtube.com/vi/${extract(video.url)}/0.jpg`}
-                                alt="thumbnail"
-                            />
+                            <div className={styles.thumbnailBox}>
+                                <img
+                                    className={styles.thumbnail}
+                                    src={`https://img.youtube.com/vi/${extract(video.url)}/0.jpg`}
+                                    alt="thumbnail"
+                                />
+                            </div>
                         )}
                         <div className={styles.keyword}>핵심 키워드</div>
                         {video.keywords.map((keyword, idx) => (

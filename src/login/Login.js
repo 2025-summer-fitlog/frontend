@@ -32,7 +32,14 @@ function Login() {
                 localStorage.setItem("userName", userName);
                 
                 alert("로그인 되었습니다.");
-                navigate("/information");
+
+                const userInfo = localStorage.getItem("information");
+
+                if (userInfo) {
+                    navigate("/main");
+                } else {
+                    navigate("/information");
+                }
             } else {
                 alert("로그인에 실패하였습니다.");
             }

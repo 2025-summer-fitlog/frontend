@@ -18,7 +18,7 @@ function Video() {
     const [selectedTab, setSelectedTab] = useState("Fit");
     const [clicked, setClicked] = useState(false);
     const [videoData, setVideoData] = useState(null);
-    const [music, setMusic] = useState(null);
+    const [music, setMusic] = useState([]);
 
     const handleProfileClick = () => navigate("/profile");
     const handleSaveClick = () => navigate("/save");
@@ -65,7 +65,6 @@ function Video() {
             if (!response.ok) throw new Error("플레이리스트를 불러오지 못했습니다.");
             const data = await response.json();
             setMusic(data);
-            console.log(data.url);
         } catch (error) {
             alert("플레이리스트를 불러오는 데 실패하였습니다.");
         }
@@ -222,7 +221,7 @@ function Video() {
                     </div>
                     {music && music.url && (
                         <div className={styles.musicBox}>
-                            <audio controls>
+                            <audio key={music.url} controls>
                                 <source src={`https://fitlog-2025.duckdns.org${music.url}`} type="audio/mpeg"/>
                             </audio>
                         </div>

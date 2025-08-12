@@ -63,6 +63,7 @@ function Save() {
                                     style={{
                                         backgroundImage: `url(${getThumbnail(video.url)})`,
                                         backgroundSize: "cover",
+                                        backgroundPosition: "center center",
                                     }}
                                     title={video.title}
                                 ></div>
