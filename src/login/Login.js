@@ -16,7 +16,7 @@ function Login() {
         }
 
         try {
-            const response = await fetch("http://fitlog-2025.duckdns.org:8080/api/users/login", {
+            const response = await fetch("https://fitlog-2025.duckdns.org/api/users/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -46,7 +46,7 @@ function Login() {
 
     const handleSocialLogin = async (provider) => {
         try {
-            const baseUrl = "http://fitlog-2025.duckdns.org:8080/oauth2/authorization";
+            const baseUrl = "https://fitlog-2025.duckdns.org/oauth2/authorization";
             const url = `${baseUrl}/${provider}`;
             window.location.href = url;
         } catch (error) {

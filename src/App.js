@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./login/Home";
 import Login from "./login/Login";
+import SocialLogin from "./login/SocialLogin";
 import Signup1 from "./login/Signup1";
 import Signup2 from "./login/Signup2";
 import FindPw from "./login/FindPw";
@@ -21,6 +22,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/socialLogin" element={<SocialLogin />} />
         <Route path="/signup1" element={<Signup1 />} />
         <Route path="/signup2" element={<Signup2 />} />
         <Route path="/findPw" element={<FindPw />} />
