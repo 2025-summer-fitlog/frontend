@@ -36,7 +36,9 @@ function Video() {
     useEffect(() => {
         const getVideoData = async () => {
             try {
-                const response = await fetch(`https://fitlog-2025.duckdns.org/api/fitlog/recommendations/${id}`);
+                const response = await fetch(`https://fitlog-2025.duckdns.org/api/fitlog/recommendations/${id}`, {
+                    credentials: "include",
+                });
                 if (!response.ok) throw new Error("영상을 불러오지 못하였습니다.");
                 const data = await response.json();
                 setVideoData(data);
@@ -61,7 +63,9 @@ function Video() {
         if (!tagId) return;
 
         try {
-            const response = await fetch(`https://fitlog-2025.duckdns.org/api/fitlog/tags/${tagId}/music`);
+            const response = await fetch(`https://fitlog-2025.duckdns.org/api/fitlog/tags/${tagId}/music`, {
+                credentials: "include",
+            });
             if (!response.ok) throw new Error("플레이리스트를 불러오지 못했습니다.");
             const data = await response.json();
             setMusic(data);
