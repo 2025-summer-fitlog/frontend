@@ -11,7 +11,7 @@ function Signup1() {
     const handelEmailSend = async () => {
         try {
             const response = await fetch("https://fitlog-2025.duckdns.org/api/users/send-verification", {
-                withCredentials: true,
+                credentials: "include",
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email })
@@ -32,7 +32,7 @@ function Signup1() {
     const handleVerifyCode = async () => {
         try {
             const response = await fetch("https://fitlog-2025.duckdns.org/api/users/verify-email", {
-                withCredentials: true,
+                credentials: "include",
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, code })
