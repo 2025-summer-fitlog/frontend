@@ -1,6 +1,6 @@
 import styles from "./Login.module.css";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 function Login() {
     const navigate = useNavigate();
@@ -8,14 +8,6 @@ function Login() {
     const [showPw, setShowPw] = useState(false);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [email, setEmail] = useState("");
-
-    useEffect(() => {
-        const storedEmail = localStorage.getItem("signupEmail");
-        if (storedEmail) {
-            setEmail(storedEmail)
-        };
-    }, []);
 
     const LoginBtnClick = async () => {
         if (!username || !password) {
@@ -36,8 +28,11 @@ function Login() {
             if (response.ok) {  
                 const userId = data.id;
                 const userName = data.name;
+                const storedEmail = data.email;
+
                 localStorage.setItem("userId", userId);
                 localStorage.setItem("userName", userName);
+                localStorage.setItem("storedEmail", storedEmail);
                 localStorage.setItem("loginMethod", "LOCAL");
                 
                 alert("로그인 되었습니다.");
