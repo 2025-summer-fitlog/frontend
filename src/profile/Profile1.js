@@ -41,7 +41,7 @@ function Profile1() {
 
         const body = {
             name: form.name,
-            ...(changePassword && form.password && { password: form.password })
+            ...(form.password && { password: form.password })
         };
 
         try {
