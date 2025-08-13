@@ -27,7 +27,7 @@ function Recommend() {
                 const shuffled = keywords.sort(() => 0.5 - Math.random());
                 const selected = shuffled.slice(0, Math.min(3, keywords.length));
                 const query = selected.map((k) => encodeURIComponent(k)).join(",");
-                const response = await fetch(`https://fitlog-2025.duckdns.org/fitlog/recommendations?keywords=${query}`);
+                const response = await fetch(`https://fitlog-2025.duckdns.org/api/fitlog/recommendations?keywords=${query}`);
                 if (!response.ok) throw new Error("추천 영상을 불러오지 못하였습니다.");
                 const data = await response.json();
                 setRecommend(data);

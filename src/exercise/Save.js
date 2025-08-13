@@ -23,7 +23,7 @@ function Save() {
         const getSaved = async () => {
             try {
                 const result = await Promise.all(types.map(async (type) => {
-                    const response = await fetch(`https://fitlog-2025.duckdns.org/fitlog/users/${userId}/saved-videos-by-type?type=${type}`);
+                    const response = await fetch(`https://fitlog-2025.duckdns.org/api/fitlog/users/${userId}/saved-videos-by-type?type=${type}`);
                     if (!response.ok) throw new Error("저장된 영상을 불러오지 못하였습니다.");
                     const data = await response.json();
                     return [type, Array.isArray(data) ? data : []];

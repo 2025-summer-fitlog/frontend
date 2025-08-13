@@ -44,7 +44,7 @@ function Fit() {
         if (placeId !== null) {
             const getExercise = async () => {
                 try {
-                    const response = await fetch(`https://fitlog-2025.duckdns.org/fitlog/exercises/${placeId}`);
+                    const response = await fetch(`https://fitlog-2025.duckdns.org/api/fitlog/exercises/${placeId}`);
                     if (!response.ok) throw new Error("운동 정보를 불러오지 못하였습니다.");
                     const data = await response.json();
                     setExerciseOption(data);
