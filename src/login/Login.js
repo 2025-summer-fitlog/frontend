@@ -28,11 +28,10 @@ function Login() {
             if (response.ok) {  
                 const userId = data.id;
                 const userName = data.name;
-                const storedEmail = data.email;
 
                 localStorage.setItem("userId", userId);
                 localStorage.setItem("userName", userName);
-                localStorage.setItem("storedEmail", storedEmail);
+                localStorage.setItem("signupEmail", data.email);
                 localStorage.setItem("loginMethod", "LOCAL");
                 
                 alert("로그인 되었습니다.");
