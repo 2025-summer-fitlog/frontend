@@ -14,6 +14,7 @@ function FindPw() {
 
         try {
             const response = await fetch("https://fitlog-2025.duckdns.org/api/users/request-reset-password", {
+                withCredentials: true,
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username, name, email }),

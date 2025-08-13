@@ -22,7 +22,9 @@ function ResetPw() {
             setToken(urlToken);
 
             try {
-                const response = await fetch(`https://fitlog-2025.duckdns.org/api/users/check-reset-token?token=${urlToken}`);
+                const response = await fetch(`https://fitlog-2025.duckdns.org/api/users/check-reset-token?token=${urlToken}`, {
+                    withCredentials: true,
+                });
                 if (!response.ok) throw new Error("토큰이 유효하지 않습니다.");
                 setIsTokenValid(true);
             } catch (error) {
@@ -46,6 +48,7 @@ function ResetPw() {
 
         try {
             const response = await fetch("https://fitlog-2025.duckdns.org/api/users/reset-password", {
+                withCredentials: true,
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ token: token, newPassword: newPassword }),

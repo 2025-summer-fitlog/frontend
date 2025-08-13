@@ -33,6 +33,7 @@ function Signup() {
 
         try {
             const response = await fetch("https://fitlog-2025.duckdns.org/api/users/register", {
+                withCredentials: true,
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, username, password, name }),

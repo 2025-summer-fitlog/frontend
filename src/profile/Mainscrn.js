@@ -22,9 +22,7 @@ function Main() {
         try {
             const response = await fetch("https://fitlog-2025.duckdns.org/api/users/logout", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 credentials: "include",
             });
 
