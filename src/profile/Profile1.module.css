@@ -62,3 +62,14 @@
     stroke: #9b9b9b;
     transform: translate(116px, -35px);
 }
+
+.back {
+    position: absolute;
+    font-size: 18px;
+    width: 44px;
+    height: 28px;
+    border-width: 1px;
+    border-radius: 8px;
+    padding-bottom: 2px;
+    transform: translate(-130px, 198px);
+}

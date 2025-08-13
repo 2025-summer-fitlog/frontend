@@ -1,7 +1,12 @@
 import styles from "./Profile2.module.css";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Profile2() {
+    const navigate = useNavigate();
+
+    const handleBackBtnClick = () => navigate(-1);
+
     const [data, setData] = useState({
         height: "", weight: "",
         year: "", month: "", day: "",
@@ -176,6 +181,7 @@ function Profile2() {
                 </section>
             </div>
             <button className={styles.Btn} onClick={handleSave}>확인</button>
+            <button className={styles.back} onClick={handleBackBtnClick}>‹</button>
         </div>
     );
 }

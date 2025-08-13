@@ -19,8 +19,8 @@
     height: 56px;
     border: 3px solid black;
     border-radius: 50%;
-    margin-top: 40px;
-    transform: translateX(-80px);
+    margin-top: 52px;
+    transform: translateX(-56px);
     background-image: url("../profileIcon.png");
     background-position: center center;
     background-size: cover;
@@ -28,17 +28,18 @@
 
 .username{
     font-size: 48px;
-    margin-top: 28px;
+    margin-top: 40px;
 }
 
 .main {
     display: flex;
     justify-content: center;
     gap: 160px;
-    margin-top: 96px;
+    margin-top: 88px;
 }
 
-.main div {
+.Inform,
+.Exercise {
     width: 280px;
     height: 400px;
     border: 5px solid black;
@@ -62,4 +63,20 @@
 .img2{
     width: 184px;
     transform: translateY(-16px);
+}
+
+.button{
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+}
+
+.back{
+    width: 44px;
+    height: 44px;
+    font-size: 32px;
+    padding-bottom: 16px;
+    transform: translate(-352px, -136px);
+    background-color: white;
+    border-radius: 4px;
 }

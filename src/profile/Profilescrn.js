@@ -10,6 +10,7 @@ function Profilescrn() {
     const [name, setName] = useState("");
     const handleInformClick = () => navigate("/inform");
     const handleExerciseClick = () => navigate("/exercise");
+    const handleBackBtnClick = () => navigate(-1);
 
     useEffect(() => {
         const storedName = localStorage.getItem("userName");
@@ -30,12 +31,15 @@ function Profilescrn() {
                         className={styles.img1}
                     />
                 </div>
-                <div className={styles.Excercise} onClick={handleExerciseClick}>
+                <div className={styles.Exercise} onClick={handleExerciseClick}>
                     <h1>운동 정보 수정</h1>
                     <img
                         src={profile2Icon}
                         className={styles.img2}
                     />
+                </div>
+                <div className={styles.button}>
+                    <button className={styles.back} onClick={handleBackBtnClick}>‹</button>
                 </div>
             </main>
         </div>

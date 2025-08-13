@@ -1,16 +1,19 @@
 import styles from "./Profile1.module.css";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Profile1() {
+    const navigate = useNavigate();
+
+    const handleBackBtnClick = () => navigate(-1);
     const [loginType, setLoginType] = useState(false);
+    const [changePassword, setChangePassword] = useState(false);
     const [form, setForm] = useState({
         name: "",
         email: "",
         password: "",
         confirmPassword: ""
     });
-
-    const [changePassword, setChangePassword] = useState(false);
 
     useEffect(() => {
         const storedName = localStorage.getItem("userName");
@@ -144,6 +147,7 @@ function Profile1() {
                 )}
             </span>
             <button className={styles.saveBtn} onClick={handleSave}>저장</button>
+            <button className={styles.back} onClick={handleBackBtnClick}>←</button>
         </div>
     );
 }
