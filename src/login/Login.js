@@ -1,6 +1,6 @@
 import styles from "./Login.module.css";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function Login() {
     const navigate = useNavigate();
@@ -8,6 +8,14 @@ function Login() {
     const [showPw, setShowPw] = useState(false);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
+
+    useEffect(() => {
+        const storedEmail = localStorage.getItem("signupEmail");
+        if (storedEmail) {
+            setEmail(storedEmail)
+        };
+    }, []);
 
     const LoginBtnClick = async () => {
         if (!username || !password) {

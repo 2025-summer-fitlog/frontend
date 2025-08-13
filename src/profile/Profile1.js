@@ -55,6 +55,8 @@ function Profile1() {
             if (!response.ok) throw new Error("정보를 저장하지 못하였습니다.");
 
             await response.json();
+            
+            localStorage.setItem("userName", form.name);
             alert("정보가 저장되었습니다.");
             setForm(prev => ({
                 ...prev,
