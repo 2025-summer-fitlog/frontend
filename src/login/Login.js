@@ -16,7 +16,7 @@ function Login() {
         }
 
         try {
-            const response = await fetch("https://fitlog-2025.duckdns.org/api/users/auth/login", {
+            const response = await fetch("https://fitlog-2025.duckdns.org/auth/login", {
                 withCredentials: true,
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
