@@ -46,6 +46,7 @@ function Profile1() {
 
         try {
             const response = await fetch("https://fitlog-2025.duckdns.org/api/profile/personal-info", {
+                withCredentials: true,
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body)
