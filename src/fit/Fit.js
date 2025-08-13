@@ -25,7 +25,9 @@ function Fit() {
     useEffect(() => {
         const getPlace = async () => {
             try {
-                const response = await fetch("https://fitlog-2025.duckdns.org/fitlog/places");
+                const response = await fetch("https://fitlog-2025.duckdns.org/api/fitlog/places", {
+                    credentials: "include",
+                });
                 if (!response.ok) throw new Error("장소 정보를 불러오지 못하였습니다.");
                 const data = await response.json();
                 setPlace(data);
