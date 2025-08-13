@@ -31,6 +31,7 @@ function Login() {
                 const userName = data.name;
                 localStorage.setItem("userId", userId);
                 localStorage.setItem("userName", userName);
+                localStorage.setItem("loginMethod", "LOCAL");
                 
                 alert("로그인 되었습니다.");
 
@@ -54,6 +55,7 @@ function Login() {
 
     const handleSocialLogin = async (provider) => {
         try {
+            localStorage.setItem("loginMethod", "SOCIAL");
             const baseUrl = "https://fitlog-2025.duckdns.org/oauth2/authorization";
             const url = `${baseUrl}/${provider}`;
             window.location.href = url;

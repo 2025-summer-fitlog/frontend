@@ -2,6 +2,7 @@ import styles from "./Profile1.module.css";
 import { useEffect, useState } from "react";
 
 function Profile1() {
+    const [loginType, setLoginType] = useState(false);
     const [form, setForm] = useState({
         name: "",
         email: "",
@@ -14,12 +15,17 @@ function Profile1() {
     useEffect(() => {
         const storedName = localStorage.getItem("userName");
         const storedEmail = localStorage.getItem("signupEmail");
+        const loginMethod = localStorage.getItem("loginMethod");
 
         setForm(prev => ({
             ...prev,
             name: storedName || "",
             email: storedEmail || ""
         }));
+
+        if (loginMethod === "SOCIAL") {
+            setLoginType(true);
+        }
     }, []);
 
     const handleChange = (e) => {
@@ -89,6 +95,7 @@ function Profile1() {
                 name="password"
                 value={form.password}
                 onChange={handleChange}
+                disabled={loginType}
             />
             <span
                 className={styles.showPwIcon}
@@ -114,6 +121,7 @@ function Profile1() {
                 name="confirmPassword"
                 value={form.confirmPassword}
                 onChange={handleChange}
+                disabled={loginType}
             />
             <span
                 className={styles.showConfirmIcon}
