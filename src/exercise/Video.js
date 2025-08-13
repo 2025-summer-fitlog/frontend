@@ -81,7 +81,8 @@ function Video() {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ userId, videoId: id })
+                    body: JSON.stringify({ userId, videoId: id }),
+                    credentials: "include",
                 }
             );
             if (!response.ok) throw new Error("영상을 저장하지 못하였습니다.");
