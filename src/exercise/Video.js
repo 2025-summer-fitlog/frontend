@@ -247,7 +247,7 @@ function Video() {
                     {music && music.url && (
                         <div className={styles.musicBox}>
                             <audio key={music.url} controls>
-                                <source src={`https://fitlog-2025.duckdns.org${music.url}`} type="audio/mpeg"/>
+                                <source src={`https://fitlog-2025.duckdns.org/api${music.url}`} type="audio/mpeg"/>
                             </audio>
                         </div>
                     )}
