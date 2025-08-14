@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 function Save() {
     const navigate = useNavigate();
 
+    const handleBackBtnClick = () => navigate(-1);
+
     const getUserId = () => localStorage.getItem("userId");
     const [saved, setSaved] = useState({ 상체: [], 하체: [], 복부: [], 전신: [] });
 
@@ -74,6 +76,7 @@ function Save() {
                     </main>
                 ))}
             </div>
+            <button className={styles.back} onClick={handleBackBtnClick}>‹</button>
         </div>
     );
 }

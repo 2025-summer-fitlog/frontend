@@ -147,7 +147,7 @@ function Profile1() {
                 )}
             </span>
             <button className={styles.saveBtn} onClick={handleSave}>저장</button>
-            <button className={styles.back} onClick={handleBackBtnClick}>←</button>
+            <button className={styles.back} onClick={handleBackBtnClick}>‹</button>
         </div>
     );
 }
