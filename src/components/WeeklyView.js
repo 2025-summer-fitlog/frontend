@@ -1,96 +1,74 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
+import { addDays, dateKeyLocal } from "../utils/date";
+import { getScore } from "../utils/score";
 
-const WeeklyView = ({ selectedDate, weeklyData, setWeeklyData }) => {
-  const [weekRange, setWeekRange] = useState("");
-  const [baseDate, setBaseDate] = useState(new Date(selectedDate));
+export default function WeeklyView({ weekStart, onWeekChange, records, onSelectDate }) {
+  const canvasRef = useRef(null);
+  const start = new Date(weekStart);
+
+  const labels = [];
+  const scores = [];
+  for (let i = 0; i < 7; i++) {
+    const d = addDays(start, i);
+    const key = dateKeyLocal(d);
+    labels.push(`${d.getMonth() + 1}.${d.getDate()}`);
+
+    const r = records[key];
+    const score =
+      r && Array.isArray(r.symbols) && r.symbols.length
+        ? r.symbols.reduce((s, v) => s + getScore(v), 0) / r.symbols.length
+        : 0;
+    scores.push(Math.round(score));
+  }
 
   useEffect(() => {
-    const formattedDate = baseDate.toISOString().split("T")[0];
-    fetchWeeklyData(formattedDate);
-    updateWeekRange(baseDate);
-  }, [baseDate]);
-
-  const fetchWeeklyData = async (date) => {
-    try {
-      const response = await fetch(`https://fitlog-2025.duckdns.org/api/log/daily/weekly?date=${date}`);
-      if (!response.ok) throw new Error("주간 데이터 불러오기 실패");
-      const data = await response.json();
-      setWeeklyData(data);
-      drawWeeklyBarChart(data);
-    } catch (error) {
-      console.error("[주간 기록 불러오기 실패]", error);
-    }
-  };
-
-  const updateWeekRange = (dateObj) => {
-    const day = dateObj.getDay(); // 0(일) ~ 6(토)
-    const sunday = new Date(dateObj);
-    sunday.setDate(dateObj.getDate() - day);
-    const saturday = new Date(sunday);
-    saturday.setDate(sunday.getDate() + 6);
-
-    const format = (d) => `${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
-    setWeekRange(`${format(sunday)} ~ ${format(saturday)}`);
-  };
-
-  const drawWeeklyBarChart = (data) => {
-    const ctx = document.getElementById("weeklyChart");
-    if (!ctx) return;
-    if (Chart.getChart(ctx)) Chart.getChart(ctx).destroy();
-
-    const labels = data.map((entry) => entry.date);
-    const scores = data.map((entry) => entry.averageScore);
-
-    new Chart(ctx, {
+    const ctx = canvasRef.current.getContext("2d");
+    const chart = new Chart(ctx, {
       type: "bar",
       data: {
         labels,
         datasets: [
           {
-            label: "평균 점수",
+            label: "이번 주 평균 점수",
             data: scores,
-            backgroundColor: "#9ADBF6",
-            borderRadius: 10,
           },
         ],
       },
       options: {
         responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true,
-            max: 100,
-          },
+        scales: { y: { beginAtZero: true, max: 100 } },
+        onClick: (_, elements) => {
+          if (elements.length > 0) {
+            const idx = elements[0].index;
+            const clicked = addDays(start, idx);
+            onSelectDate(dateKeyLocal(clicked));
+          }
         },
       },
     });
-  };
+    return () => chart.destroy();
+  }, [weekStart, JSON.stringify(records)]);
 
-  const handlePrevWeek = () => {
-    const newDate = new Date(baseDate);
-    newDate.setDate(baseDate.getDate() - 7);
-    setBaseDate(newDate);
-  };
-
-  const handleNextWeek = () => {
-    const newDate = new Date(baseDate);
-    newDate.setDate(baseDate.getDate() + 7);
-    setBaseDate(newDate);
-  };
+  const end = addDays(start, 6);
 
   return (
-    <div>
-      <div style={{ textAlign: "center", fontSize: "24px", marginBottom: "10px" }}>
-        <button onClick={handlePrevWeek}>←</button>
-        <span style={{ margin: "0 20px" }}>{weekRange}</span>
-        <button onClick={handleNextWeek}>→</button>
+    <div className="tab-content active" id="week">
+      <div
+        id="weekly-header-wrapper"
+        style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 36, marginBottom: 30, marginTop: 10 }}
+      >
+        <button className="arrow-btn" onClick={() => onWeekChange(-1)}>
+          ◀
+        </button>
+        <div id="weekly-header" className="tab-date">
+          {`${start.getMonth() + 1}.${start.getDate()} ~ ${end.getMonth() + 1}.${end.getDate()}`}
+        </div>
+        <button className="arrow-btn" onClick={() => onWeekChange(1)}>
+          ▶
+        </button>
       </div>
-      <div className="graph-container">
-        <canvas id="weeklyChart" width="600" height="300"></canvas>
-      </div>
+      <canvas id="weeklyChart" ref={canvasRef} />
     </div>
   );
-};
-
-export default WeeklyView;
+}

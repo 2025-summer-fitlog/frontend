@@ -1,36 +1,103 @@
-import { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-function ExerciseRecord() {
-  const [selected, setSelected] = useState(""); // ○, △, ✕
+export default function ExerciseRecord({ lines, onChange }) {
+  const [showDelete, setShowDelete] = useState({});
+  const timersRef = useRef({});      
 
-  const handleClick = (mark) => {
-    setSelected(mark);
+  const updateLine = (idx, patch) => {
+    onChange(lines.map((l, i) => (i === idx ? { ...l, ...patch } : l)));
   };
 
+  const removeLine = (idx) => {
+    onChange(lines.filter((_, i) => i !== idx));
+    clearTimer(idx);
+    setShowDelete((prev) => ({ ...prev, [idx]: false }));
+  };
+
+  const clearTimer = (idx) => {
+    if (timersRef.current[idx]) {
+      clearTimeout(timersRef.current[idx]);
+      delete timersRef.current[idx];
+    }
+  };
+
+  const handleEnter = (idx) => {
+    clearTimer(idx);
+    timersRef.current[idx] = setTimeout(() => {
+      setShowDelete((prev) => ({ ...prev, [idx]: true }));
+    }, 1000);
+  };
+
+  const handleLeave = (idx) => {
+    clearTimer(idx);
+    setShowDelete((prev) => ({ ...prev, [idx]: false }));
+  };
+
+  useEffect(() => {
+    Object.keys(timersRef.current).forEach((k) => {
+      const i = Number(k);
+      if (i >= lines.length) {
+        clearTimer(i);
+      }
+    });
+  }, [lines.length]);
+
+  useEffect(() => {
+    return () => {
+      Object.values(timersRef.current).forEach((t) => clearTimeout(t));
+      timersRef.current = {};
+    };
+  }, []);
+
   return (
-    <div>
-      <h2>2025년 7월 19일</h2>
-      <p style={{ fontSize: "1.2rem" }}>
-        운동 수행 기록:{" "}
-        {["O", "△", "X"].map((mark) => (
-          <button
-            key={mark}
-            onClick={() => handleClick(mark)}
-            style={{
-              color: selected === mark ? "#FFD400" : "black", // 선택된 기호만 노란색
-              background: "none",
-              border: "none",
-              fontSize: "1.5rem",
-              cursor: "pointer",
-              marginRight: "10px",
-            }}
+    <ul id="log-list">
+      {lines.map((line, idx) => {
+        const show = !!showDelete[idx];
+        return (
+          <li
+            key={idx}
+            className="record-line"
+            style={{ position: "relative", display: "flex", alignItems: "center", cursor: "default" }}
+            onMouseEnter={() => handleEnter(idx)}
+            onMouseLeave={() => handleLeave(idx)}
           >
-            {mark}
-          </button>
-        ))}
-      </p>
-    </div>
+            {!show ? (
+              <span className="line-icon" style={{ marginRight: 8 }}>•</span>
+            ) : (
+              <button
+                type="button"
+                className="line-delete-btn"
+                onClick={() => removeLine(idx)}
+              >
+                삭제
+              </button>
+            )}
+
+            <input
+              type="text"
+              className="record-text"
+              placeholder="오늘의 운동 계획"
+              value={line.text}
+              onChange={(e) => updateLine(idx, { text: e.target.value })}
+              style={{ flex: 1, fontSize: "18px", border: "none", outline: "none", background: "none" }}
+              onFocus={() => handleEnter(idx)}
+              onBlur={() => handleLeave(idx)}
+            />
+
+            <span className="record-options" data-index={idx}>
+              {["O", "△", "X"].map((sym) => (
+                <span
+                  key={sym}
+                  className={line.symbol === sym ? "selected" : ""}
+                  onClick={() => updateLine(idx, { symbol: sym })}
+                >
+                  {sym}
+                </span>
+              ))}
+            </span>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
-
-export default ExerciseRecord;

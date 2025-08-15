@@ -1,0 +1,340 @@
+/* 공통 */
+:root {
+  --chart-area-height: 490px;
+}
+
+body { margin:0; font-family:-apple-system, system-ui, Segoe UI, Roboto, "Noto Sans KR", sans-serif; }
+.page { background:#fff; min-height:100vh; }
+
+/* 위아래 배치 */
+.container {
+  display:flex;
+  flex-direction: column;
+  align-items:stretch;
+  gap: 32px;
+  padding: 0;
+  width: 100%;
+}
+
+/* 상단(탭 + 그래프/달력) */
+.left {
+  width: 100%;
+  background: white;
+  padding: 1px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  flex: 0 0 auto;
+}
+
+/* 탭 컨텐츠 */
+.tab-content {
+  width: 100%;
+  height: var(--chart-area-height);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* 탭 메뉴 */
+.menu { display:flex; gap:100px; margin:40px 0 40px 0; }
+.menu button { padding:12px 30px; border:1px solid #ccc; background:#F5FBFE; border-radius:20px; font-size:22px; font-weight:600; cursor:pointer; transition:all .2s; transform:scale(1); }
+.menu button.active { background:#9ADBF6; color:#fff; transform:scale(1.30); box-shadow:0 4px 10px rgba(0,0,0,0.1); }
+
+/* 일별 원형 차트 */
+.circle { width:450px; height:450px; margin:0 auto; display:flex; justify-content:center; align-items:center; padding-top:10px; padding-bottom:35.5px; }
+canvas { width:300px; height:300px; }
+
+/* 주간 헤더는 고정 높이로 */
+#weekly-header-wrapper { display:flex; justify-content:center; align-items:center; gap:36px; margin-bottom:30px; margin-top:10px; font-size:15px; height:60px; }
+.arrow-btn { background:none; border:none; padding:0; font-size:24px; cursor:pointer; color:#333; }
+.arrow-btn:hover { color:#0C9EF9; }
+
+/* 주간 차트 */
+#weeklyChart {
+  display:block;
+  margin:0 auto;
+  width:100%;
+  max-width:600px;
+  height: calc(var(--chart-area-height) - 100px);
+}
+
+/* 월간 헤더도 고정 높이로 */
+#monthly-header-wrapper { display:flex; justify-content:center; align-items:center; gap:36px; margin-bottom:30px; margin-top:10px; height:60px; }
+.tab-date { font-size:30px; font-weight:800; text-align:center; margin-top:10px; margin-bottom:30px; }
+
+/* 월간 테이블 */
+.monthly { margin:0 auto; width:100%; max-width:600px; table-layout:fixed; border-spacing:10px 16px; }
+.monthly td { width:40px; height:40px; text-align:center; vertical-align:middle; border-radius:6px; font-size:15px; cursor:pointer; }
+
+/* 하단(기록/피드백) */
+.right {
+  width: 100%;
+  background:#F5FBFE;
+  padding:32px;
+  display:flex;
+  flex-direction:column;
+  flex: 0 0 auto;
+}
+.right h2 { font-size:30px; font-weight:700; margin-bottom:65px; }
+
+/* 기록/메모 묶음 */
+.record-memo-row { display:flex; gap:50px; justify-content:center; flex-direction:row; margin-bottom:40px; padding-left:40px; }
+
+/* 기록 박스 */
+.record-box { position:relative; flex:0 0 380px; background:#fff; border:1px solid #ccc; border-radius:12px; padding:24px 20px; margin-left:20px; margin-bottom:50px; box-shadow:0 2px 6px rgba(0,0,0,0.05); height:235px; padding-bottom:15px; overflow-y:auto; text-align:left; width:500px; }
+.record-box ul { list-style:none; padding:0; margin:0; }
+.record-box li { font-size:20px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; }
+.record-options span { margin-left:12px; font-weight:bold; cursor:pointer; color:#ccc; font-size:25px; }
+.record-options span.selected { color:#FFF1B8; }
+.add-line { font-size:28px; font-weight:700; color:#555; text-align:center; cursor:pointer; margin-top:16px; margin-left:6px; transition:color .2s; }
+.add-line:hover { color:#E0B94C; }
+
+/* 메모 박스 */
+.memo-box { justify-content:space-between; height:320px; position:relative; width:100%; max-width:600px; display:flex; flex-direction:column; }
+.memo-input-wrapper { position:relative; width:100%; background:#FFF5D9; border:1px solid #ccc; border-radius:16px; padding:16px 20px 20px 20px; box-shadow:0 2px 6px rgba(0,0,0,0.05); min-height:320px; max-height:320px; display:flex; flex-direction:column; overflow:hidden; box-sizing:border-box; }
+.memo-input { flex:1; width:100%; height:100%; resize:none; border:none; outline:none; background:none; font-size:18px; line-height:1.6; overflow-y:auto; }
+.save-btn { align-self:flex-end; margin-top:6px; background:none; border:1px solid #ccc; padding:6px 14px; font-size:14px; font-weight:bold; border-radius:8px; cursor:pointer; }
+
+/* 사진 미리보기 */
+.image-preview-in-memo { display:flex; flex-direction:row; gap:8px; overflow-x:auto; margin-bottom:10px; }
+.preview-wrapper { position:relative; width:80px; height:80px; border-radius:8px; overflow:hidden; flex-shrink:0; border:1px solid #ccc; background:#f5f5f5; }
+.preview-wrapper img { width:100%; height:100%; object-fit:cover; display:block; }
+.delete-image-btn { position:absolute; top:6px; right:6px; background:rgba(0,0,0,.6); color:#fff; border:none; font-size:14px; padding:4px 8px; border-radius:10px; cursor:pointer; z-index:2; }
+
+/* 사진 아이콘 */
+.photo-icon { position:absolute; top:12px; right:12px; cursor:pointer; opacity:.6; z-index:2; }
+.photo-icon:hover { opacity:1; }
+.photo-icon img { width:32px; height:32px; }
+
+/* 버튼 그룹 */
+.btn-group { position:absolute; bottom:-52px; right:20px; display:flex; gap:12px; }
+
+/* 피드백 */
+.quote { display:flex; flex-direction:row; align-items:center; gap:12px; font-size:14px; font-weight:600; color:#444; margin-top:30px; flex-wrap:nowrap; }
+.character { width:50px; height:50px; border-radius:50%; border:2px solid black; background-size:cover; background-position:center; }
+/* 배경 이미지는 컴포넌트에서 지정(FeedbackView.js) */
+.balloon-text { font-size:18px; background:#fff; padding:20px 40px; border-radius:20px; box-shadow:0 2px 8px rgba(0,0,0,0.1); line-height:1.5; display:inline-block; max-width:400px; min-width:160px; word-break:break-word; position:relative; }
+.balloon-text::before { content:""; position:absolute; left:-10px; top:20px; width:0; height:0; border-top:10px solid transparent; border-bottom:10px solid transparent; border-right:10px solid white; }
+
+/* ===== FitLog: 기록/메모 카드 간격 정리 패치 (파일 맨 아래에 붙여넣기) ===== */
+:root {
+  /* 카드 공통 규격 */
+  --card-width: 560px;   /* 두 카드 너비(하얀/노란) */
+  --card-gap: 32px;      /* 카드 사이 간격 */
+}
+
+/* 기록/메모 묶음 */
+.record-memo-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, var(--card-width)));
+  justify-content: center;    /* 중앙 정렬 */
+  align-items: flex-start;
+  gap: var(--card-gap);
+  margin: 24px 0 40px 0;
+  padding-left: 0;            /* 기존에 좌측으로 치우치던 여백 무효화 */
+}
+
+/* 두 카드 공통 너비 */
+.record-box,
+.memo-box {
+  width: 90%;
+  max-width: var(--card-width);
+}
+
+/* 기록 박스(흰색) - 왼쪽 마진 제거 + 높이 균형 */
+.record-box {
+  margin-left: 0;             /* 기존 20px 규칙 덮어쓰기 */
+  min-height: 320px;          /* 노란 메모와 높이 느낌 맞춤 */
+  height: auto;
+}
+
+/* (반응형) 좁은 화면에서는 세로로 쌓기 */
+@media (max-width: 1120px) {
+  .record-memo-row {
+    grid-template-columns: 1fr;
+  }
+  .record-box,
+  .memo-box {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+}
+
+/* 약간 더 좁을 때 카드 너비 살짝 줄이기 */
+@media (max-width: 1200px) {
+  :root {
+    --card-width: 520px;
+  }
+}
+
+
+/* ===== FitLog: 기록 카드 고정 높이 + 내부 스크롤 ===== */
+/* 메모 카드와 동일 높이 사용 */
+:root {
+  --card-height: 360px;
+}
+
+/* 기록 카드: 고정 높이 + 내부(목록)만 스크롤되게 */
+.record-box {
+  height: var(--card-height) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important; /* 카드 전체는 고정, 내부만 스크롤 */
+  margin-left: 0 !important;   /* 좌우 대칭 유지 */
+}
+
+/* 운동 목록(ul)만 스크롤 영역으로 지정 */
+#log-list {
+  flex: 1 1 auto !important;
+  overflow-y: auto !important;
+  margin: 0 !important;
+  padding-right: 8px;           /* 스크롤바 겹침 여백 */
+}
+
+/* + 버튼은 카드 하단 고정 느낌으로 */
+.add-line {
+  align-self: flex-end;
+  margin-top: 8px;
+}
+
+/* 메모 카드도 같은 높이 유지 (보강) */
+.memo-input-wrapper {
+  height: var(--card-height) !important;
+}
+
+/* (선택) 스크롤바 미세 스타일 */
+#log-list::-webkit-scrollbar { width: 8px; }
+#log-list::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.15); border-radius: 8px; }
+#log-list::-webkit-scrollbar-track { background: transparent; }
+/* ===== /패치 끝 ===== */
+
+/* ===== FitLog: 스크롤바 통일 + 추가버튼 중앙 정렬 패치 ===== */
+:root {
+  /* 노란 메모창 톤에 어울리는 스크롤 색상 */
+  --scroll-thumb: rgba(0, 0, 0, 0.25);
+  --scroll-thumb-hover: rgba(0, 0, 0, 0.35);
+  --scroll-track: transparent;
+}
+
+/* 양쪽 스크롤바 색상/두께 통일 (Firefox) */
+#log-list,
+.memo-input {
+  scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+  scrollbar-width: thin;
+}
+
+/* 양쪽 스크롤바 색상/두께 통일 (WebKit: Chrome/Safari/Edge) */
+#log-list::-webkit-scrollbar,
+.memo-input::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+#log-list::-webkit-scrollbar-thumb,
+.memo-input::-webkit-scrollbar-thumb {
+  background: var(--scroll-thumb);
+  border-radius: 8px;
+}
+#log-list::-webkit-scrollbar-thumb:hover,
+.memo-input::-webkit-scrollbar-thumb:hover {
+  background: var(--scroll-thumb-hover);
+}
+#log-list::-webkit-scrollbar-track,
+.memo-input::-webkit-scrollbar-track {
+  background: var(--scroll-track);
+}
+
+/* 기록 카드 내부 목록 여백 */
+#log-list {
+  padding-right: 8px !important;
+}
+
+.add-line {
+  align-self: center !important;   /* 중앙 정렬 */
+  margin-top: 8px !important;
+}
+
+/* === 기록창을 메모창과 '세로길이/모양' 동일하게 맞추기 === */
+/* 메모창 현재 높이(320px)에 맞춤. 바꾸고 싶으면 320px만 수정하면 돼요. */
+.record-box {
+  height: 320px !important;           /* 메모창과 동일 높이 */
+  border-radius: 16px !important;     /* 메모창과 동일 모서리 */
+  padding: 20px 15px 12px 20px !important;  /* 메모창과 동일 패딩 */
+  overflow: hidden !important;        /* 박스는 고정, 내부만 스크롤 */
+}
+
+/* 운동 계획 목록만 스크롤되도록 */
+.record-box ul#log-list {
+  height: 100% !important;
+  overflow-y: auto !important;
+  margin: 0 !important;
+  padding-right: 8px !important;      /* 스크롤바가 텍스트 덮지 않게 */
+}
+
+/* (선택) + 버튼은 카드 하단 오른쪽 유지 */
+.add-line {
+  align-self: flex-end !important;
+  margin-top: 8px !important;
+}
+
+/* === 기록창: + 버튼 중앙 + 높이 조금 낮추기 === */
+:root {
+  --record-box-height: 320px; /* 하얀 기록창 높이 (기존 320에서 살짝 ↓). 원하면 값만 바꿔줘 */
+}
+
+.record-box {
+  height: var(--record-box-height) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;   /* 박스는 고정, 내부 리스트만 스크롤 */
+  margin-left: 0 !important;     /* 좌우 대칭 유지 */
+}
+
+/* 목록만 스크롤 */
+#log-list {
+  flex: 1 1 auto !important;
+  overflow-y: auto !important;
+  padding-right: 8px !important; /* 스크롤바 여백 */
+  margin: 0 !important;
+}
+
+/* ‘＋’ 버튼 하단 중앙 정렬 */
+.add-line {
+  align-self: center !important;
+  margin-top: 8px !important;
+}
+
+/* 삭제 버튼 스타일(입력칸 왼쪽 작은 알약 형태) */
+.line-delete-btn {
+  margin-right: 8px;
+  padding: 2px 10px;
+  font-size: 12px;
+  line-height: 1.6;
+  border-radius: 10px;
+  border: 1px solid #e74c3c;
+  color: #e74c3c;
+  background: #fff;
+  cursor: pointer;
+}
+.line-delete-btn:hover {
+  background: #ffe9e9;
+}
+
+/* ===== 이미지 라이트박스 ===== */
+.image-modal {
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0; */
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out; /* 바깥 클릭으로 닫힘 힌트 */
+}
+.image-modal img {
+  max-width: 90vw;
+  max-height: 90vh;
+  border-radius: 8px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+}

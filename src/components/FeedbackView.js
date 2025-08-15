@@ -1,34 +1,24 @@
-//  App.js에서 넘겨야 할 props:
-// selectedDate: 오늘 날짜
-// feedbackData: 응답 저장용
-// setFeedbackData: 상태 갱신 함수
+import React, { useMemo } from "react";
 
-import React, { useEffect } from "react";
-
-const FeedbackView = ({ selectedDate, feedbackData, setFeedbackData }) => {
-  useEffect(() => {
-    if (selectedDate) fetchFeedback(selectedDate);
-  }, [selectedDate]);
-
-  const fetchFeedback = async (date) => {
-    try {
-      const response = await fetch(`https://fitlog-2025.duckdns.org/api/log/daily/feedback/daily?date=${date}`);
-      if (!response.ok) throw new Error("피드백 불러오기 실패");
-      const data = await response.json();
-      setFeedbackData(data);
-    } catch (error) {
-      console.error("[피드백 API 실패]", error);
+export default function FeedbackView({ main, extra }) {
+  const message = useMemo(() => {
+    const trimmedExtra = (extra || "").trim();
+    if (trimmedExtra) {
+      const first = trimmedExtra.split(/<br\s*\/?>/i)[0]?.trim();
+      if (first) return first;
     }
-  };
-
-  if (!feedbackData || !feedbackData.feedback) return null;
+    return (main || "").trim();
+  }, [main, extra]);
 
   return (
-    <div className="feedback-box">
-      <p className="feedback-grade">등급: {feedbackData.grade}</p>
-      <p className="feedback-text">{feedbackData.feedback}</p>
+    <div className="quote" id="feedback-section" style={{ display: "flex" }}>
+      <div
+        className="character"
+        style={{
+          backgroundImage: `url(${process.env.PUBLIC_URL}/runnerIcon.png)`,
+        }}
+      />
+      <div className="balloon-text">{message}</div>
     </div>
   );
-};
-
-export default FeedbackView;
+}

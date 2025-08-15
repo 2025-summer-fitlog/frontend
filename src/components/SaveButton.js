@@ -13,7 +13,7 @@ function SaveButton() {
     const score = mark === "O" ? 100 : mark === "△" ? 50 : 0;
 
     const requestBody = {
-      date: "2025-07-19", // 추후 new Date() 활용 가능
+      date: "2025-07-19",
       mark,
       memo,
       score,

@@ -11,7 +11,7 @@ function loadWeeklyLog(baseDate) {
         scores.push(entry.averageScore);
       });
 
-      updateBarChart(labels, scores); // ✅ 막대 차트 그리기
+      updateBarChart(labels, scores);
     })
     .catch(err => console.error("주간 기록 불러오기 실패:", err));
 }
