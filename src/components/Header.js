@@ -54,7 +54,7 @@ export default function Header() {
 
             if (!response.ok) throw new Error("로그아웃에 실패하였습니다.");
 
-            navigate("/logout");
+            navigate("/");
         } catch (error) {
             alert("로그아웃에 실패하였습니다.");
         }
