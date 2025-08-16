@@ -33,18 +33,31 @@ export default function Header() {
 
   // 프로필/저장영상/로그아웃 액션
   const handleProfileClick = () => {
-    setProfileOpen(false);
     navigate("/profile");
   };
 
   const handleSaveClick = () => {
-    setProfileOpen(false);
-    navigate("/clips");
+    navigate("/save");
   };
 
-  const handleLogoutClick = () => {
-    setProfileOpen(false);
-    navigate("/login");
+  const handleLogoutClick = () => logout();
+
+  const logout = async () => {
+        try {
+            const response = await fetch("https://fitlog-2025.duckdns.org/api/users/logout", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+            });
+
+            if (!response.ok) throw new Error("로그아웃에 실패하였습니다.");
+
+            navigate("/");
+        } catch (error) {
+            alert("로그아웃에 실패하였습니다.");
+        }
   };
 
   useEffect(() => {
@@ -99,7 +112,7 @@ export default function Header() {
               프로필
             </span>
             <span className={styles.p2} onClick={handleSaveClick} role="menuitem" tabIndex={0}>
-              <img src={videoIcon} className={styles.videoIcon} alt="" />
+              <img src={videoIcon} className={styles.video} alt="" />
               저장영상
             </span>
             <span className={styles.p3} onClick={handleLogoutClick} role="menuitem" tabIndex={0}>
