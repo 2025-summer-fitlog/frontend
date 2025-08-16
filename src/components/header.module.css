@@ -1,0 +1,117 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+.container {
+  background-color: #9adaf62b;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;   
+  padding: 16px 32px;
+  background: #F5FBFE;              
+  border-bottom: 1px solid #eee;    
+}
+
+.header h1 {
+  font-size: 32px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tab {
+  display: flex;
+  gap: 560px;
+  list-style: none;
+  font-size: 26px;
+  align-items: center;
+}
+
+.active,
+.inactive {
+  cursor: pointer;
+  user-select: none;
+  padding-bottom: 8px; 
+  border-bottom: 3px solid transparent;
+  font-weight: 500;
+}
+
+.active {
+  font-weight: 600;
+  border-bottom-color: #000;
+}
+
+.profileWrap {
+  position: relative; 
+  display: flex;
+  align-items: center;
+}
+
+.profileIcon {
+  width: 48px;
+  height: 48px;
+  border: 3px solid black;
+  border-radius: 50%;
+  cursor: pointer;
+  background-position: center center;
+  background-size: cover;
+  background-image: url("../assets/profileIcon.png");
+}
+
+.profile {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 10px);
+  display: flex;
+  flex-direction: column;
+  min-width: 128px;
+  background-color: #fff;
+  border: 3px solid black;
+  border-radius: 16px;
+  font-size: 20px;
+  z-index: 20;
+}
+
+.p1 {
+    padding: 4px 34px 4px 0px;
+    width: 130px;
+    text-align: right;
+    border-bottom: 3px solid black;
+}
+
+.p2{
+    padding: 5px 16px 5px 0px;
+    width: 130px;
+    text-align: right;
+    border-bottom: 3px solid black;
+}
+
+.p3{
+    padding: 5px 18px 5px 0px;
+    width: 130px;
+    text-align: right;
+    transform: translateY(-2px);
+}
+
+.prf {
+    position: absolute;
+    width: 28px;
+    transform: translateX(-32px);
+}
+
+.video {
+    position: absolute;
+    width: 28px;
+    transform: translateX(-34px);
+}
+
+.logout {
+    position: absolute;
+    width: 20px;
+    transform: translateX(-28px);
+}

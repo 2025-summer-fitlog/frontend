@@ -16,6 +16,9 @@ import Recommend from "./exercise/Recommend";
 import Video from "./exercise/Video";
 import Save from "./exercise/Save";
 
+import Epp from "./Epp";
+
+
 function App() {
   return (
     <Router>
@@ -36,6 +39,8 @@ function App() {
         <Route path="/recommend" element={<Recommend />} />
         <Route path="/video/:id" element={<Video />} />
         <Route path="/save" element={<Save />} />
+
+        <Route path="/Epp" element={<Epp/>} />
       </Routes>
     </Router>
   );
