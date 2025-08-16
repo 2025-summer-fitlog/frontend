@@ -11,7 +11,7 @@ function Main() {
     const navigate = useNavigate();
     const [profile, setProfile] = useState(false);
 
-    const handleLogClick = () => navigate("/log");
+    const handleLogClick = () => navigate("/Epp");
     const handleFitClick = () => navigate("/fit");
     const handleProfileClick = () => navigate("/profile");
     const handleSaveClick = () => navigate("/save");

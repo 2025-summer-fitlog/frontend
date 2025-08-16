@@ -133,7 +133,7 @@ function Video() {
                         className={selectedTab === "Log" ? styles.active : styles.inactive}
                         onClick={() => {
                             setSelectedTab("Log");
-                            navigate("/log");
+                            navigate("/Epp");
                         }}
                     >
                         Log

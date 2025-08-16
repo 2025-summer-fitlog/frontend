@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import styles from "./header.module.css";
 
-import profileIcon from "../assets/profileIcon.png";
-import videoIcon from "../assets/videoIcon.png";
-import logoutIcon from "../assets/logoutIcon.png";
+import profileIcon from "../profileIconSmall.png";
+import videoIcon from "../videoIcon.png";
+import logoutIcon from "../logoutIcon.png";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -73,8 +73,6 @@ export default function Header() {
   return (
     <header className={styles.header}>
       <h1 className={styles.logo} onClick={handleLogoClick}>FitLog</h1>
-  
-
       <ul className={styles.tab}>
         <li
           className={selectedTab === "Fit" ? styles.active : styles.inactive}

@@ -44,8 +44,8 @@
 }
 
 .profileIcon {
-    width: 48px;
-    height: 48px;
+    width: 52px;
+    height: 52px;
     background-image: url("../profileIcon.png");
     background-position: center center;
     background-size: cover;
@@ -61,48 +61,47 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 128px;
-    height: 112px;
+    width: 132px;
+    height: 120px;
     border: 3px solid black;
     background-color: white;
     border-radius: 16px;
-    transform: translate(968px, 96px);
+    transform: translate(968px, 98px);
     font-size: 20px;
     cursor: pointer;
 }
 
 .p1 {
-    padding: 4px 28px 4px 0px;
-    width: 104px;
+    padding: 5px 26px 5px 0px;
+    width: 128px;
     text-align: right;
+    border-bottom: 3px solid black;
 }
 
-.p2,
-.p3 {
-    padding: 4px 16px 4px 0px;
-    width: 116px;
-    text-align: right;
-}
-
-.p1,
 .p2 {
+    padding: 4px 14px 5px 0px;
+    width: 128px;
+    text-align: right;
     border-bottom: 3px solid black;
 }
 
 .p3 {
+    padding: 5px 16px 6px 0px;
+    width: 128px;
+    text-align: right;
     transform: translateY(-2px);
 }
 
 .prf {
     position: absolute;
     width: 20px;
-    transform: translate(-32px, 4px);
+    transform: translate(-32px, 5px);
 }
 
 .video {
     position: absolute;
     width: 28px;
-    transform: translate(-34px, 4px);
+    transform: translate(-33px, 5px);
 }
 
 .logout {
@@ -118,8 +117,8 @@
 }
 
 .section{
-    width: 324px;
-    height: 480px;
+    width: 328px;
+    height: 484px;
     border: 3px solid black;
     background-color: #FEEEC1;
     font-size: 24px;
@@ -130,7 +129,7 @@
 }
 
 .keyword{
-    margin: 12px 0px 8px 16px;
+    margin: 8px 0px 8px 16px;
 }
 
 .hashtag{
@@ -139,8 +138,8 @@
 }
 
 .thumbnailBox {
-    width: 324px;
-    height: 200px;
+    width: 328px;
+    height: 204px;
 }
 
 .thumbnail{

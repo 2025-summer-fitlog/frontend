@@ -11,46 +11,46 @@
     height: 100vh;
 }
 
-.body{
+.body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 240px;
-    height: 400px;
+    width: 248px;
+    height: 408px;
     border: 5px solid black;
     border-radius: 36px;
     background-color: white;
 }
 
-.body h1{
+.body h1 {
     font-size: 30px;
     margin: 24px;
 }
 
-.body input{
-    height: 32px;
+.body input {
+    height: 34px;
     border-radius: 32px;
     border: 1px solid #B2B2B2;
     margin-bottom: 24px;
     padding-left: 12px;
 }
 
-.cm{
+.cm {
     position: absolute;
     transform: translate(60px, 95px);
     color: #B2B2B2;
     font-weight: 320;
 }
 
-.kg{
+.kg {
     position: absolute;
     transform: translate(62px, 154px);
     color: #B2B2B2;
     font-weight: 320;
 }
 
-.body select{
-    width: 168px;
+.body select {
+    width: 172px;
     height: 32px;
     border-radius: 32px;
     border: 1px solid #B2B2B2;
@@ -59,42 +59,42 @@
 }
 
 .height,
-.weight{
-    width: 160px;
+.weight {
+    width: 172px;
 }
 
-.year{
-    width: 52px;
+.year {
+    width: 64px;
 }
 
-.month{
-    width: 32px;
+.month {
+    width: 44px;
     margin: 0px 6px;
 }
 
-.day{
-    width: 32px;
+.day {
+    width: 44px;
 }
 
-.time{
+.time {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 240px;
-    height: 136px;
+    width: 248px;
+    height: 144px;
     border: 5px solid black;
     border-radius: 36px;
     background-color: white;
     margin: 0px 22px 22px;
 }
 
-.time h1{
+.time h1 {
     margin: 16px 0px 20px;
     font-size: 28px;
 }
 
-.time input{
-    width: 40px;
+.time input {
+    width: 48px;
     height: 30px;
     border-radius: 32px;
     border: 1px solid #B2B2B2;
@@ -102,50 +102,50 @@
     padding-left: 8px;
 }
 
-.time span{
+.time span {
     margin-right: 16px;
 }
 
-.purpose{
+.purpose {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 240px;
-    height: 232px;
+    width: 248px;
+    height: 240px;
     border: 5px solid black;
     border-radius: 36px;
     background-color: white;
     margin-left: 22px;
 }
 
-.purpose h1{
+.purpose h1 {
     margin: 12px 0px 6px;
     font-size: 28px;
 }
 
-.purpose ul{
+.purpose ul {
     list-style: none;
     line-height: 32px;
 }
 
-.purpose label{
+.purpose label {
     margin-left: 4px;
 }
 
-.frequency{
+.frequency {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 240px;
-    height: 136px;
+    width: 248px;
+    height: 144px;
     border: 5px solid black;
     border-radius: 36px;
     background-color: white;
     margin-bottom: 22px;
 }
 
-.frequency select{
-    width: 168px;
+.frequency select {
+    width: 172px;
     height: 32px;
     border-radius: 32px;
     border: 1px solid #B2B2B2;
@@ -153,17 +153,17 @@
     padding-left: 8px;
 }
 
-.frequency h1{
+.frequency h1 {
     margin: 16px 0px 20px;
     font-size: 28px;
 }
 
-.part{
+.part {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 240px;
-    height: 232px;
+    width: 248px;
+    height: 240px;
     border: 5px solid black;
     border-radius: 36px;
     background-color: white;
@@ -174,13 +174,13 @@
     font-size: 28px;
 }
 
-.part ul{
+.part ul {
     list-style: none;
     line-height: 32px;
     transform: translateX(-56px);
 }
 
-.part label{
+.part label {
     margin-left: 4px;
 }
 
