@@ -1,4 +1,4 @@
-.Epp :root {
+.Epp {
   --chart-area-height: 490px;
 }
 
@@ -118,7 +118,7 @@
 .Epp .balloon-text::before { content:""; position:absolute; left:-10px; top:20px; width:0; height:0; border-top:10px solid transparent; border-bottom:10px solid transparent; border-right:10px solid white; }
 
 /* ===== FitLog: 기록/메모 카드 간격 정리 패치 (파일 맨 아래에 붙여넣기) ===== */
-.Epp :root {
+.Epp {
   /* 카드 공통 규격 */
   --card-width: 560px;   /* 두 카드 너비(하얀/노란) */
   --card-gap: 32px;      /* 카드 사이 간격 */
@@ -150,7 +150,7 @@
 }
 
 /* (반응형) 좁은 화면에서는 세로로 쌓기 */
-@media (max-width: 1120px) {
+@media (max-width: 900px) {
   .Epp .record-memo-row {
     grid-template-columns: 1fr;
   }
@@ -163,7 +163,7 @@
 
 /* 약간 더 좁을 때 카드 너비 살짝 줄이기 */
 @media (max-width: 1200px) {
-  .Epp :root {
+  .Epp {
     --card-width: 520px;
   }
 }
@@ -171,7 +171,7 @@
 
 /* ===== FitLog: 기록 카드 고정 높이 + 내부 스크롤 ===== */
 /* 메모 카드와 동일 높이 사용 */
-.Epp :root {
+.Epp {
   --card-height: 360px;
 }
 
@@ -210,7 +210,7 @@
 /* ===== /패치 끝 ===== */
 
 /* ===== FitLog: 스크롤바 통일 + 추가버튼 중앙 정렬 패치 ===== */
-.Epp :root {
+.Epp {
   /* 노란 메모창 톤에 어울리는 스크롤 색상 */
   --scroll-thumb: rgba(0, 0, 0, 0.25);
   --scroll-thumb-hover: rgba(0, 0, 0, 0.35);
