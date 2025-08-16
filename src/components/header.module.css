@@ -78,6 +78,7 @@
   border-radius: 16px;
   font-size: 20px;
   z-index: 20;
+  cursor: pointer;
 }
 
 .p1 {
