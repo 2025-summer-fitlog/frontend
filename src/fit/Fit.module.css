@@ -75,21 +75,20 @@
     padding: 4px 28px 4px 0px;
     width: 104px;
     text-align: right;
-}
-
-.p2,
-.p3 {
-    padding: 4px 16px 4px 0px;
-    width: 116px;
-    text-align: right;
-}
-
-.p1,
-.p2 {
     border-bottom: 3px solid black;
 }
 
-.p3 {
+.p2{
+    padding: 4px 16px 4px 0px;
+    width: 116px;
+    text-align: right;
+    border-bottom: 3px solid black;
+}
+
+.p3{
+    padding: 4px 16px 4px 0px;
+    width: 116px;
+    text-align: right;
     transform: translateY(-2px);
 }
 
