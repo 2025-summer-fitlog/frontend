@@ -17,12 +17,12 @@ export default function Header() {
 
   // 로고 클릭 시 홈(또는 원하는 곳)으로 이동
   const handleLogoClick = () => {
-    navigate("/fit"); 
-    setSelectedTab("Fit");
+    navigate("/main"); 
+    setSelectedTab("FitLog");
   };
 
   useEffect(() => {
-    if (location.pathname.startsWith("/log")) {
+    if (location.pathname.startsWith("/Epp")) {
       setSelectedTab("Log");
     } else if (location.pathname.startsWith("/fit") || location.pathname === "/") {
       setSelectedTab("Fit");
@@ -73,6 +73,7 @@ export default function Header() {
   return (
     <header className={styles.header}>
       <h1 className={styles.logo} onClick={handleLogoClick}>FitLog</h1>
+  
 
       <ul className={styles.tab}>
         <li
@@ -88,7 +89,7 @@ export default function Header() {
           className={selectedTab === "Log" ? styles.active : styles.inactive}
           onClick={() => {
             setSelectedTab("Log");
-            navigate("/log");
+            navigate("/Epp");
           }}
         >
           Log
